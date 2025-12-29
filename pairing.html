@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Pairing Guide | Arizona Wine & Food Pairings</title>
+    <meta name="description" content="Discover perfect wine and food pairings with Arizona's Sonoran Desert wines. Interactive guide featuring Tempranillo, Syrah, Viognier, and local cuisine.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    
+    <style>
+        :root {
+            --desert-sandstone: #D4A574;
+            --wine-burgundy: #722F37;
+            --sage-green: #87A96B;
+            --terracotta: #B85450;
+            --cream: #F5F1E8;
+            --charcoal: #2C2C2C;
+            --golden-hour: #E6B17A;
+            --copper: #B87333;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #F8F4ED 100%);
+            color: var(--charcoal);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(114, 47, 55, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/wine-bottles.jpg') center/cover no-repeat;
+            opacity: 0.7;
+            z-index: -1;
+        }
+        
+        .wine-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .wine-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(114, 47, 55, 0.15);
+            border-color: var(--wine-burgundy);
+        }
+        
+        .wine-card.active {
+            border-color: var(--wine-burgundy);
+            box-shadow: 0 10px 25px rgba(114, 47, 55, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .wine-card.active::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--wine-burgundy);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .food-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .food-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .food-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(114, 47, 55, 0.1);
+        }
+        
+        .aurora-bg {
+            background: linear-gradient(45deg, 
+                rgba(212, 165, 116, 0.1) 0%, 
+                rgba(230, 177, 122, 0.15) 25%, 
+                rgba(135, 169, 107, 0.1) 50%, 
+                rgba(114, 47, 55, 0.08) 75%, 
+                rgba(184, 84, 80, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: aurora 8s ease-in-out infinite;
+        }
+        
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--wine-burgundy);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--wine-burgundy);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(114, 47, 55, 0.3);
+        }
+        
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .wine-type-red { border-left: 4px solid var(--wine-burgundy); }
+        .wine-type-white { border-left: 4px solid var(--golden-hour); }
+        .wine-type-rose { border-left: 4px solid var(--terracotta); }
+        
+        .tasting-notes {
+            background: linear-gradient(135deg, rgba(114, 47, 55, 0.05), rgba(212, 165, 116, 0.05));
+            border-left: 3px solid var(--wine-burgundy);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl text-charcoal">Sonoran Wine</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link font-medium text-charcoal">Wine Regions</a>
+                    <a href="experiences.html" class="nav-link font-medium text-charcoal">Experiences</a>
+                    <a href="pairing.html" class="nav-link font-medium text-charcoal text-wine-burgundy">Pairing Guide</a>
+                    <a href="about.html" class="nav-link font-medium text-charcoal">About</a>
+                </div>
+                
+                <button class="btn-primary px-6 py-2 rounded-full font-medium">
+                    Book Experience
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg h-96 flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30"></div>
+        
+        <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                Wine & Food Pairing Guide
+            </h1>
+            <p class="text-lg md:text-xl opacity-90 leading-relaxed">
+                Discover perfect pairings with Arizona's unique Sonoran Desert wines
+            </p>
+        </div>
+    </section>
+
+    <!-- Interactive Pairing Guide -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Select Your Wine
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Choose from our curated selection of Arizona wines to discover perfect food pairings 
+                    that complement the unique Sonoran Desert terroir.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Wine Selection Panel -->
+                <div class="reveal-up">
+                    <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Arizona Wines</h3>
+                    
+                    <!-- Red Wines -->
+                    <div class="mb-8">
+                        <h4 class="font-semibold text-charcoal mb-4 flex items-center">
+                            <div class="w-4 h-4 bg-wine-burgundy rounded-full mr-3"></div>
+                            Red Wines
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="wine-card wine-type-red rounded-lg p-4 relative" data-wine="tempranillo">
+                                <h5 class="font-semibold text-charcoal">Tempranillo</h5>
+                                <p class="text-sm text-charcoal/70">Bold, earthy, mineral-driven</p>
+                                <div class="text-xs text-wine-burgundy mt-1">Sonoita AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-red rounded-lg p-4 relative" data-wine="syrah">
+                                <h5 class="font-semibold text-charcoal">Syrah</h5>
+                                <p class="text-sm text-charcoal/70">Spicy, peppery, full-bodied</p>
+                                <div class="text-xs text-wine-burgundy mt-1">Willcox AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-red rounded-lg p-4 relative" data-wine="grenache">
+                                <h5 class="font-semibold text-charcoal">Grenache</h5>
+                                <p class="text-sm text-charcoal/70">Fruity, elegant, medium-bodied</p>
+                                <div class="text-xs text-wine-burgundy mt-1">Verde Valley AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-red rounded-lg p-4 relative" data-wine="petit-sirah">
+                                <h5 class="font-semibold text-charcoal">Petit Sirah</h5>
+                                <p class="text-sm text-charcoal/70">Intense, tannic, structured</p>
+                                <div class="text-xs text-wine-burgundy mt-1">Sonoita AVA</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- White Wines -->
+                    <div class="mb-8">
+                        <h4 class="font-semibold text-charcoal mb-4 flex items-center">
+                            <div class="w-4 h-4 bg-golden-hour rounded-full mr-3"></div>
+                            White Wines
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="wine-card wine-type-white rounded-lg p-4 relative" data-wine="viognier">
+                                <h5 class="font-semibold text-charcoal">Viognier</h5>
+                                <p class="text-sm text-charcoal/70">Aromatic, stone fruit, floral</p>
+                                <div class="text-xs text-golden-hour mt-1">Willcox AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-white rounded-lg p-4 relative" data-wine="malvasia">
+                                <h5 class="font-semibold text-charcoal">Malvasia Bianca</h5>
+                                <p class="text-sm text-charcoal/70">Crisp, citrus, mineral</p>
+                                <div class="text-xs text-golden-hour mt-1">Verde Valley AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-white rounded-lg p-4 relative" data-wine="chardonnay">
+                                <h5 class="font-semibold text-charcoal">Chardonnay</h5>
+                                <p class="text-sm text-charcoal/70">Rich, buttery, oak-aged</p>
+                                <div class="text-xs text-golden-hour mt-1">Sonoita AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-white rounded-lg p-4 relative" data-wine="sauvignon-blanc">
+                                <h5 class="font-semibold text-charcoal">Sauvignon Blanc</h5>
+                                <p class="text-sm text-charcoal/70">Bright, herbaceous, clean</p>
+                                <div class="text-xs text-golden-hour mt-1">Willcox AVA</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rosés -->
+                    <div>
+                        <h4 class="font-semibold text-charcoal mb-4 flex items-center">
+                            <div class="w-4 h-4 bg-terracotta rounded-full mr-3"></div>
+                            Rosés
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="wine-card wine-type-rose rounded-lg p-4 relative" data-wine="provence-rose">
+                                <h5 class="font-semibold text-charcoal">Provence-style Rosé</h5>
+                                <p class="text-sm text-charcoal/70">Dry, elegant, refreshing</p>
+                                <div class="text-xs text-terracotta mt-1">Verde Valley AVA</div>
+                            </div>
+                            
+                            <div class="wine-card wine-type-rose rounded-lg p-4 relative" data-wine="sangiovese-rose">
+                                <h5 class="font-semibold text-charcoal">Sangiovese Rosé</h5>
+                                <p class="text-sm text-charcoal/70">Fruity, vibrant, food-friendly</p>
+                                <div class="text-xs text-terracotta mt-1">Sonoita AVA</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Food Pairings Display -->
+                <div class="lg:col-span-2 reveal-up">
+                    <div class="mb-8">
+                        <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Perfect Pairings</h3>
+                        <p class="text-charcoal/70 mb-8">
+                            Select a wine to see recommended food pairings that complement its unique characteristics 
+                            and enhance your tasting experience.
+                        </p>
+                    </div>
+                    
+                    <!-- Default State -->
+                    <div id="default-pairing" class="text-center py-16">
+                        <div class="w-24 h-24 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                        <h4 class="font-display text-xl font-bold text-charcoal mb-2">Choose Your Wine</h4>
+                        <p class="text-charcoal/70">Select a wine from the left panel to discover perfect food pairings</p>
+                    </div>
+                    
+                    <!-- Food Pairings Grid -->
+                    <div id="food-pairings-grid" class="grid md:grid-cols-2 gap-6" style="display: none;">
+                        <!-- Tempranillo Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="tempranillo">
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.sunset.com/e0dc7b8eb4fd9b6a3fc9d7ae1663c6c5318dc1dc.jpg" alt="Mesquite-grilled steak" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Mesquite-Grilled Steak</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Bold, smoky flavors complement the earthy, mineral notes of Tempranillo perfectly.</p>
+                            <div class="text-xs text-wine-burgundy font-medium">Desert Classic</div>
+                        </div>
+                        
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="tempranillo">
+                            <img src="https://kimi-web-img.moonshot.cn/img/blog.foodsafedrains.com/d2c5d613066bed8033b5afd117433a5772e66124.jpg" alt="Aged cheddar" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Aged Cheddar</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Sharp, aged cheeses balance the tannins and enhance the wine's complexity.</p>
+                            <div class="text-xs text-wine-burgundy font-medium">Artisan Selection</div>
+                        </div>
+                        
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="tempranillo">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/793f371b726e2caeae5d3c7ea6c03c682a5a9e44.jpg" alt="Dark chocolate" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Dark Chocolate</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Rich, bitter chocolate brings out the wine's fruit flavors and earthy undertones.</p>
+                            <div class="text-xs text-wine-burgundy font-medium">Sweet Finish</div>
+                        </div>
+                        
+                        <!-- Syrah Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="syrah">
+                            <img src="https://kimi-web-img.moonshot.cn/img/blog.foodsafedrains.com/14a3f1b201e7a847d07410bc25ad0b662984515b.jpg" alt="Game meats" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Game Meats</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Venison, duck, or lamb with herbs complement Syrah's bold, spicy character.</p>
+                            <div class="text-xs text-wine-burgundy font-medium">Hearty Pairing</div>
+                        </div>
+                        
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="syrah">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/6278a28449742704db50dd70672b3549bb7a4c50.jpg" alt="Spiced dishes" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Spiced Dishes</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Black pepper, rosemary, and thyme enhance Syrah's natural peppery notes.</p>
+                            <div class="text-xs text-wine-burgundy font-medium">Aromatic Match</div>
+                        </div>
+                        
+                        <!-- Viognier Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="viognier">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/5cb73a67d9a435ddd65cf4b54426d2076808ec04.jpg" alt="Seafood" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Grilled Seafood</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Halibut, scallops, or shrimp with citrus complement Viognier's floral aromatics.</p>
+                            <div class="text-xs text-golden-hour font-medium">Elegant Pairing</div>
+                        </div>
+                        
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="viognier">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/66c31744a7951801becee45bceac1de92cd0518d.jpg" alt="Creamy pasta" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Creamy Pasta</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Rich, creamy sauces balance Viognier's acidity and enhance its stone fruit flavors.</p>
+                            <div class="text-xs text-golden-hour font-medium">Luxurious Match</div>
+                        </div>
+                        
+                        <!-- Malvasia Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="malvasia">
+                            <img src="https://kimi-web-img.moonshot.cn/img/media.tacdn.com/3de7ced7124fa0575485b37c90487dbceb9c5f02.jpg" alt="Light salads" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Desert Salads</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Prickly pear, mesquite greens, and citrus vinaigrette complement Malvasia's crisp minerality.</p>
+                            <div class="text-xs text-golden-hour font-medium">Local Flavors</div>
+                        </div>
+                        
+                        <!-- Chardonnay Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="chardonnay">
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.riolasvegas.com/556f7181615273793001926c85a26265ada9717f.jpg" alt="Butter sauces" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Butter-Poached Lobster</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Rich, buttery dishes enhance Chardonnay's oak aging and creamy texture.</p>
+                            <div class="text-xs text-golden-hour font-medium">Decadent Pairing</div>
+                        </div>
+                        
+                        <!-- Sauvignon Blanc Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="sauvignon-blanc">
+                            <img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/566803e8323f2cb6ddb0fa35524a2367feeff001.jpg" alt="Goat cheese" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Goat Cheese & Herbs</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Tangy cheeses and fresh herbs complement Sauvignon Blanc's bright, herbaceous character.</p>
+                            <div class="text-xs text-golden-hour font-medium">Fresh & Light</div>
+                        </div>
+                        
+                        <!-- Rosé Pairings -->
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="provence-rose">
+                            <img src="https://kimi-web-img.moonshot.cn/img/designcompass.net/08b6a7b3373dc46f9031683d3e96937c8425c0d0.jpeg" alt="Mediterranean dishes" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Mediterranean Cuisine</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Olives, tomatoes, and herbs pair beautifully with dry, elegant rosé wines.</p>
+                            <div class="text-xs text-terracotta font-medium">Elegant & Versatile</div>
+                        </div>
+                        
+                        <div class="food-card rounded-2xl p-6" data-pairs-with="sangiovese-rose">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.ctykit.com/dfaae57a8b35a022f165805adfebe2fad13aede5.png" alt="Spicy appetizers" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <h4 class="font-display text-lg font-bold text-charcoal mb-2">Spicy Appetizers</h4>
+                            <p class="text-sm text-charcoal/70 mb-3">Chili, paprika, and cumin dishes balance beautifully with fruity Sangiovese rosé.</p>
+                            <div class="text-xs text-terracotta font-medium">Flavorful & Fun</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tasting Notes Section -->
+    <section class="py-20 aurora-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Wine Education
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Learn about the unique characteristics that make Arizona wines special and 
+                    discover the science behind perfect pairings.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="tasting-notes rounded-2xl p-8 reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4 text-center">Sonoran Terroir</h3>
+                    <p class="text-charcoal/70 text-center leading-relaxed">
+                        Arizona's high-desert climate, with elevations of 4,000-5,000 feet, creates unique growing conditions. 
+                        Warm days and cool nights concentrate flavors while maintaining acidity.
+                    </p>
+                </div>
+                
+                <div class="tasting-notes rounded-2xl p-8 reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-sage-green to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4 text-center">Flavor Science</h3>
+                    <p class="text-charcoal/70 text-center leading-relaxed">
+                        Wine and food pairing works through complementary and contrasting flavors. 
+                        Acidity cuts through fat, tannins bind with proteins, and aromatics enhance each other.
+                    </p>
+                </div>
+                
+                <div class="tasting-notes rounded-2xl p-8 reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-copper to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4 text-center">Local Cuisine</h3>
+                    <p class="text-charcoal/70 text-center leading-relaxed">
+                        Arizona's desert cuisine features mesquite-grilled meats, prickly pear, and native herbs. 
+                        These ingredients create unique flavor profiles that pair beautifully with local wines.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Save & Share Features -->
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-up">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-gradient mb-6">
+                    Save Your Favorites
+                </h2>
+                <p class="text-xl text-charcoal/80 mb-8 leading-relaxed">
+                    Create your personal wine journal and share your favorite pairings with friends.
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="wine-card rounded-2xl p-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-charcoal mb-2">Wine Journal</h3>
+                        <p class="text-sm text-charcoal/70">Save your favorite pairings and tasting notes</p>
+                    </div>
+                    
+                    <div class="wine-card rounded-2xl p-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-sage-green to-golden-hour rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-charcoal mb-2">Share Pairings</h3>
+                        <p class="text-sm text-charcoal/70">Share discoveries with friends on social media</p>
+                    </div>
+                    
+                    <div class="wine-card rounded-2xl p-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-terracotta to-golden-hour rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-charcoal mb-2">Export Guide</h3>
+                        <p class="text-sm text-charcoal/70">Download your personalized pairing guide PDF</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <button class="btn-primary px-8 py-3 rounded-full font-medium text-lg">
+                        Create My Wine Journal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl">Sonoran Wine Experiences</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Discover Arizona's hidden wine country in the heart of the Sonoran Desert
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.017.001z.017 0z"/>
+                        </svg>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2025 Sonoran Wine Experiences. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Initialize wine pairing functionality when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            SonoranWine.initWinePairing();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Tasting Experiences | Sonoran Desert Wine Tours</title>
+    <meta name="description" content="Book exclusive wine tasting experiences in Arizona's Sonoran Desert. Vineyard tours, private tastings, food pairings, and seasonal events in Sonoita, Elgin, Wilcox, and Cottonwood.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <style>
+        :root {
+            --desert-sandstone: #D4A574;
+            --wine-burgundy: #722F37;
+            --sage-green: #87A96B;
+            --terracotta: #B85450;
+            --cream: #F5F1E8;
+            --charcoal: #2C2C2C;
+            --golden-hour: #E6B17A;
+            --copper: #B87333;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #F8F4ED 100%);
+            color: var(--charcoal);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(114, 47, 55, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/wine-tasting.jpg') center/cover no-repeat;
+            opacity: 0.8;
+            z-index: -1;
+        }
+        
+        .experience-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .experience-card:hover {
+            transform: translateY(-8px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(114, 47, 55, 0.15);
+            border-color: var(--wine-burgundy);
+        }
+        
+        .calendar-day {
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover {
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.available {
+            background: var(--sage-green);
+            color: white;
+            cursor: pointer;
+        }
+        
+        .calendar-day.selected {
+            background: var(--wine-burgundy);
+            color: white;
+        }
+        
+        .aurora-bg {
+            background: linear-gradient(45deg, 
+                rgba(212, 165, 116, 0.1) 0%, 
+                rgba(230, 177, 122, 0.15) 25%, 
+                rgba(135, 169, 107, 0.1) 50%, 
+                rgba(114, 47, 55, 0.08) 75%, 
+                rgba(184, 84, 80, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: aurora 8s ease-in-out infinite;
+        }
+        
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--wine-burgundy);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--wine-burgundy);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(114, 47, 55, 0.3);
+        }
+        
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .experience-type-vineyard { border-left: 4px solid var(--sage-green); }
+        .experience-type-tasting { border-left: 4px solid var(--wine-burgundy); }
+        .experience-type-pairing { border-left: 4px solid var(--terracotta); }
+        .experience-type-event { border-left: 4px solid var(--golden-hour); }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl text-charcoal">Sonoran Wine</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link font-medium text-charcoal">Wine Regions</a>
+                    <a href="experiences.html" class="nav-link font-medium text-charcoal text-wine-burgundy">Experiences</a>
+                    <a href="pairing.html" class="nav-link font-medium text-charcoal">Pairing Guide</a>
+                    <a href="about.html" class="nav-link font-medium text-charcoal">About</a>
+                </div>
+                
+                <button class="btn-primary px-6 py-2 rounded-full font-medium">
+                    Book Experience
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg h-96 flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30"></div>
+        
+        <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                Wine Tasting Experiences
+            </h1>
+            <p class="text-lg md:text-xl opacity-90 leading-relaxed">
+                Curated wine adventures through Arizona's most beautiful and authentic wine regions
+            </p>
+        </div>
+    </section>
+
+    <!-- Experience Types -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Choose Your Experience
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    From intimate vineyard walks to grand tasting events, we offer experiences 
+                    for every wine lover and occasion.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="experience-card experience-type-vineyard rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-sage-green to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Vineyard Tours</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Walk through working vineyards with expert guides. Learn about desert viticulture, 
+                        grape growing, and the unique challenges of high-elevation winemaking.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 1.5 hours</div>
+                        <div>Group size: 2-12 people</div>
+                    </div>
+                    <div class="text-wine-burgundy font-bold text-lg">$45 per person</div>
+                </div>
+                
+                <div class="experience-card experience-type-tasting rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Private Tastings</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Intimate tasting experiences with winemakers and sommeliers. Sample reserve wines 
+                        and learn about the stories behind each bottle.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 2 hours</div>
+                        <div>Group size: 2-8 people</div>
+                    </div>
+                    <div class="text-wine-burgundy font-bold text-lg">$75 per person</div>
+                </div>
+                
+                <div class="experience-card experience-type-pairing rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-terracotta to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Food & Wine Pairings</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Chef-prepared pairings featuring local ingredients and Arizona wines. 
+                        Discover how desert cuisine complements our unique terroir.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 3 hours</div>
+                        <div>Group size: 4-10 people</div>
+                    </div>
+                    <div class="text-wine-burgundy font-bold text-lg">$120 per person</div>
+                </div>
+                
+                <div class="experience-card experience-type-event rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-golden-hour to-copper rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Seasonal Events</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Harvest festivals, wine release parties, and special celebrations. 
+                        Join us for unique seasonal experiences throughout the year.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 4-6 hours</div>
+                        <div>Group size: Varies</div>
+                    </div>
+                    <div class="text-wine-burgundy font-bold text-lg">$85-150 per person</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Booking Calendar -->
+    <section class="py-20 aurora-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Calendar -->
+                <div class="reveal-up">
+                    <div class="wine-card rounded-2xl p-8">
+                        <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Select Your Date</h3>
+                        <div id="booking-calendar"></div>
+                        <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-sage-green rounded mr-2"></div>
+                                <span>Available</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-wine-burgundy rounded mr-2"></div>
+                                <span>Selected</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-gray-300 rounded mr-2"></div>
+                                <span>Unavailable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Booking Form -->
+                <div class="reveal-up">
+                    <div class="wine-card rounded-2xl p-8">
+                        <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Booking Details</h3>
+                        <form id="booking-form" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-charcoal mb-2">Experience Type</label>
+                                <select class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                    <option>Vineyard Tour - $45</option>
+                                    <option>Private Tasting - $75</option>
+                                    <option>Food & Wine Pairing - $120</option>
+                                    <option>Seasonal Event - $85-150</option>
+                                </select>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-charcoal mb-2">Date</label>
+                                    <input type="date" class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-charcoal mb-2">Time</label>
+                                    <select class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                        <option>10:00 AM</option>
+                                        <option>12:00 PM</option>
+                                        <option>2:00 PM</option>
+                                        <option>4:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-charcoal mb-2">Adults</label>
+                                    <select class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5+</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-charcoal mb-2">Region</label>
+                                    <select class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                        <option>Sonoita AVA</option>
+                                        <option>Willcox AVA</option>
+                                        <option>Verde Valley AVA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-charcoal mb-2">Special Requests</label>
+                                <textarea rows="3" class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none" placeholder="Dietary restrictions, accessibility needs, special occasions..."></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-charcoal mb-2">Contact Information</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="text" placeholder="First Name" class="p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                    <input type="text" placeholder="Last Name" class="p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <input type="email" placeholder="Email Address" class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                            </div>
+                            
+                            <div>
+                                <input type="tel" placeholder="Phone Number" class="w-full p-3 border border-gray-200 rounded-lg focus:border-wine-burgundy focus:ring-2 focus:ring-wine-burgundy/20 outline-none">
+                            </div>
+                            
+                            <button type="submit" class="w-full btn-primary py-4 rounded-lg text-lg font-semibold">
+                                Confirm Booking
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Experiences -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Featured Experiences
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Discover our most popular wine adventures, carefully curated for unforgettable memories.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="experience-card rounded-2xl overflow-hidden reveal-up">
+                    <img src="https://kimi-web-img.moonshot.cn/img/azwinehopstouring.com/5b9d51928c736ad3992f7f4a06cc21a1cc158196.jpg" alt="Sonoita Wine Trail" class="w-full h-64 object-cover">
+                    <div class="p-8">
+                        <h3 class="font-display text-2xl font-bold text-charcoal mb-4">Sonoita Wine Trail Adventure</h3>
+                        <p class="text-charcoal/70 mb-6 leading-relaxed">
+                            Full-day exploration of Arizona's first AVA. Visit 4-5 wineries including Los Milics, 
+                            Rune Wines, and Dos Cabezas. Includes transportation, tastings, and lunch.
+                        </p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-wine-burgundy font-medium">8 hours • Sonoita AVA</span>
+                            <span class="text-wine-burgundy font-bold text-xl">$185</span>
+                        </div>
+                        <button class="btn-primary px-6 py-3 rounded-lg font-medium w-full">Book This Experience</button>
+                    </div>
+                </div>
+                
+                <div class="experience-card rounded-2xl overflow-hidden reveal-up">
+                    <img src="https://kimi-web-img.moonshot.cn/img/verdecanyonrr.com/4f1e943575cce4940f453ff65e16bb4388412a07.jpg" alt="Verde Valley Wine Train" class="w-full h-64 object-cover">
+                    <div class="p-8">
+                        <h3 class="font-display text-2xl font-bold text-charcoal mb-4">Verde Valley Wine Train</h3>
+                        <p class="text-charcoal/70 mb-6 leading-relaxed">
+                            Scenic rail journey through Verde Canyon with wine tastings from local vineyards. 
+                            Includes visits to Alcantara and Page Springs Cellars.
+                        </p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-wine-burgundy font-medium">6 hours • Verde Valley AVA</span>
+                            <span class="text-wine-burgundy font-bold text-xl">$165</span>
+                        </div>
+                        <button class="btn-primary px-6 py-3 rounded-lg font-medium w-full">Book This Experience</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl">Sonoran Wine Experiences</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Discover Arizona's hidden wine country in the heart of the Sonoran Desert
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.017.001z.017 0z"/>
+                        </svg>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2025 Sonoran Wine Experiences. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Initialize booking calendar when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            SonoranWine.initBookingCalendar();
+        });
+    </script>
+</body>
+</html>

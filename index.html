@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonoran Desert Wine Experiences | Arizona Wine Country Tours</title>
+    <meta name="description" content="Discover Arizona's hidden wine country in Sonoita, Elgin, Wilcox, and Cottonwood. Experience unique high-desert terroir and award-winning wines in the Sonoran Desert.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <style>
+        :root {
+            --desert-sandstone: #D4A574;
+            --wine-burgundy: #722F37;
+            --sage-green: #87A96B;
+            --terracotta: #B85450;
+            --cream: #F5F1E8;
+            --charcoal: #2C2C2C;
+            --golden-hour: #E6B17A;
+            --copper: #B87333;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #F8F4ED 100%);
+            color: var(--charcoal);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(114, 47, 55, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/hero-vineyard.jpg') center/cover no-repeat;
+            opacity: 0.9;
+            z-index: -1;
+        }
+        
+        .wine-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .wine-card:hover {
+            transform: translateY(-8px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(114, 47, 55, 0.15);
+            border-color: var(--wine-burgundy);
+        }
+        
+        .region-marker {
+            width: 24px;
+            height: 24px;
+            background: var(--wine-burgundy);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .region-marker:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(114, 47, 55, 0.6);
+        }
+        
+        .region-marker::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .aurora-bg {
+            background: linear-gradient(45deg, 
+                rgba(212, 165, 116, 0.1) 0%, 
+                rgba(230, 177, 122, 0.15) 25%, 
+                rgba(135, 169, 107, 0.1) 50%, 
+                rgba(114, 47, 55, 0.08) 75%, 
+                rgba(184, 84, 80, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: aurora 8s ease-in-out infinite;
+        }
+        
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--wine-burgundy);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--wine-burgundy);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(114, 47, 55, 0.3);
+        }
+        
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .splide__slide img {
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .splide__slide:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl text-charcoal">Sonoran Wine</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link font-medium text-charcoal">Wine Regions</a>
+                    <a href="experiences.html" class="nav-link font-medium text-charcoal">Experiences</a>
+                    <a href="pairing.html" class="nav-link font-medium text-charcoal">Pairing Guide</a>
+                    <a href="about.html" class="nav-link font-medium text-charcoal">About</a>
+                </div>
+                
+                <button class="btn-primary px-6 py-2 rounded-full font-medium">
+                    Book Experience
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20"></div>
+        
+        <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+            <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 leading-tight" data-splitting>
+                Discover Arizona's Hidden Wine Country
+            </h1>
+            
+            <div class="text-xl md:text-2xl mb-8 font-accent">
+                <span id="typed-regions"></span>
+            </div>
+            
+            <p class="text-lg md:text-xl mb-12 max-w-2xl mx-auto opacity-90 leading-relaxed">
+                Experience the unique terroir of the Sonoran Desert at 5,000 feet elevation. 
+                Award-winning wines, breathtaking landscapes, and unforgettable tastings await.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="btn-primary px-8 py-4 rounded-full text-lg font-semibold">
+                    Explore Our Regions
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-charcoal transition-all duration-300">
+                    View Experiences
+                </button>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Wine Regions Interactive Map -->
+    <section class="py-20 aurora-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Arizona's Wine Regions
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Explore three distinct American Viticultural Areas, each with unique terroir, 
+                    climate, and winemaking traditions that define Arizona's emerging wine culture.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Interactive Map -->
+                <div class="reveal-up">
+                    <div class="relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
+                        <img src="resources/desert-landscape.jpg" alt="Arizona Wine Country Map" class="w-full h-96 object-cover rounded-xl mb-6">
+                        
+                        <!-- Region Markers -->
+                        <div class="absolute top-1/4 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
+                            <div class="region-marker" data-region="sonoita"></div>
+                            <div class="absolute top-8 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap">
+                                Sonoita AVA
+                            </div>
+                        </div>
+                        
+                        <div class="absolute top-1/3 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
+                            <div class="region-marker" data-region="willcox"></div>
+                            <div class="absolute top-8 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap">
+                                Willcox AVA
+                            </div>
+                        </div>
+                        
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <div class="region-marker" data-region="verde"></div>
+                            <div class="absolute top-8 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap">
+                                Verde Valley AVA
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Region Information -->
+                <div class="reveal-up">
+                    <div id="region-info" class="space-y-8">
+                        <div class="wine-card rounded-2xl p-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-4 h-4 rounded-full bg-wine-burgundy mr-3"></div>
+                                <h3 class="font-display text-2xl font-bold text-charcoal">Sonoita AVA</h3>
+                            </div>
+                            <div class="text-sm text-wine-burgundy font-medium mb-3">Est. 1984 • Arizona's First AVA</div>
+                            <p class="text-charcoal/80 mb-4 leading-relaxed">
+                                Rolling grasslands at 5,000 feet elevation, surrounded by the Santa Rita, 
+                                Huachuca, and Whetstone Mountains. Cooler climate with warm days and crisp nights.
+                            </p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="font-medium text-charcoal">Elevation:</span>
+                                    <span class="text-charcoal/70"> 4,000-5,000 ft</span>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-charcoal">Wineries:</span>
+                                    <span class="text-charcoal/70"> 20+</span>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-charcoal">Signature:</span>
+                                    <span class="text-charcoal/70"> Tempranillo, Syrah</span>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-charcoal">Soil:</span>
+                                    <span class="text-charcoal/70"> Limestone-rich</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Wineries Carousel -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Featured Wineries
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Discover award-winning wineries and tasting rooms that showcase the best of Arizona's wine country.
+                </p>
+            </div>
+            
+            <div class="splide reveal-up" id="winery-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/losmilicsvineyards.com/5b9d51928c736ad3992f7f4a06cc21a1cc158196.jpg" alt="Los Milics Vineyards" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="font-display text-xl font-bold text-charcoal mb-2">Los Milics Vineyards</h3>
+                                    <p class="text-charcoal/70 text-sm mb-4">Voted one of top 5 tasting rooms in the US. Modern tasting room with stunning mountain views.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-wine-burgundy font-medium">Sonoita AVA</span>
+                                        <button class="text-wine-burgundy font-medium text-sm hover:underline">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/arizonadetours.com/4f1e943575cce4940f453ff65e16bb4388412a07.jpg" alt="Rune Wines" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="font-display text-xl font-bold text-charcoal mb-2">Rune Wines</h3>
+                                    <p class="text-charcoal/70 text-sm mb-4">Off-grid, solar-powered winery with exceptional views and sustainable practices.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-wine-burgundy font-medium">Sonoita AVA</span>
+                                        <button class="text-wine-burgundy font-medium text-sm hover:underline">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/www.visitcottonwoodaz.org/6b60ac80816bab1f315f0b96d2f36da4912d0bad.jpg" alt="Alcantara Vineyards" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="font-display text-xl font-bold text-charcoal mb-2">Alcantara Vineyards</h3>
+                                    <p class="text-charcoal/70 text-sm mb-4">Largest vineyard in central Arizona with Verde River access and wine train experiences.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-wine-burgundy font-medium">Verde Valley AVA</span>
+                                        <button class="text-wine-burgundy font-medium text-sm hover:underline">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/static1.thetravelimages.com/59634db6057a293d72f32f0dfc1bc899571ecdee.JPG" alt="Dos Cabezas WineWorks" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="font-display text-xl font-bold text-charcoal mb-2">Dos Cabezas WineWorks</h3>
+                                    <p class="text-charcoal/70 text-sm mb-4">Cornerstone of Arizona wine industry since 1995 with award-winning varietals.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-wine-burgundy font-medium">Sonoita AVA</span>
+                                        <button class="text-wine-burgundy font-medium text-sm hover:underline">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl overflow-hidden">
+                                <img src="https://kimi-web-img.moonshot.cn/img/carpe-travel.com/72893398e67740e970122d1ab291c7e5513c1e92.jpg" alt="Page Springs Cellars" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="font-display text-xl font-bold text-charcoal mb-2">Page Springs Cellars</h3>
+                                    <p class="text-charcoal/70 text-sm mb-4">Rhône-style varietals along Oak Creek with serene tasting room and bistro.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-wine-burgundy font-medium">Verde Valley AVA</span>
+                                        <button class="text-wine-burgundy font-medium text-sm hover:underline">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Sonoran Desert Wine -->
+    <section class="py-20 aurora-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Why Sonoran Desert Wine?
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Arizona's high-desert wine regions offer unique growing conditions that produce 
+                    distinctive wines unlike anywhere else in the world.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="wine-card rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">High Elevation Terroir</h3>
+                    <p class="text-charcoal/70 leading-relaxed">
+                        At 4,000-5,000 feet elevation, our vineyards benefit from cooler temperatures, 
+                        intense sunlight, and dramatic diurnal temperature swings that concentrate flavors.
+                    </p>
+                </div>
+                
+                <div class="wine-card rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-sage-green to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Unique Soil Composition</h3>
+                    <p class="text-charcoal/70 leading-relaxed">
+                        Limestone-rich, well-draining soils combined with volcanic deposits create mineral-driven 
+                        wines with distinctive character and aging potential.
+                    </p>
+                </div>
+                
+                <div class="wine-card rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-copper to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Award-Winning Quality</h3>
+                    <p class="text-charcoal/70 leading-relaxed">
+                        Recognized internationally with awards from San Francisco World Spirits Competition 
+                        and featured in USA Today's top wine trails.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    What Our Guests Say
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Discover why wine lovers from around the world choose our Sonoran Desert wine experiences.
+                </p>
+            </div>
+            
+            <div class="splide reveal-up" id="testimonial-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl p-8 text-center">
+                                <div class="text-4xl text-wine-burgundy mb-4">"</div>
+                                <p class="text-lg text-charcoal/80 mb-6 italic leading-relaxed">
+                                    The Sonoita wine region completely surprised us! The high desert landscape is breathtaking, 
+                                    and the wines are exceptional. Los Milics Vineyards was a highlight with their stunning views 
+                                    and knowledgeable staff.
+                                </p>
+                                <div class="flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                        S
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-charcoal">Sarah Mitchell</div>
+                                        <div class="text-sm text-charcoal/60">Phoenix, AZ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl p-8 text-center">
+                                <div class="text-4xl text-wine-burgundy mb-4">"</div>
+                                <p class="text-lg text-charcoal/80 mb-6 italic leading-relaxed">
+                                    As a wine enthusiast, I was blown away by the quality of Arizona wines. The terroir here 
+                                    creates unique flavors you won't find anywhere else. The wine pairing guide helped us 
+                                    discover perfect combinations with local cuisine.
+                                </p>
+                                <div class="flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-sage-green to-golden-hour rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                        M
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-charcoal">Michael Rodriguez</div>
+                                        <div class="text-sm text-charcoal/60">San Diego, CA</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="wine-card rounded-2xl p-8 text-center">
+                                <div class="text-4xl text-wine-burgundy mb-4">"</div>
+                                <p class="text-lg text-charcoal/80 mb-6 italic leading-relaxed">
+                                    The Verde Valley wine train experience was magical! Combining stunning desert scenery 
+                                    with excellent Arizona wines made for an unforgettable day. Highly recommend for any 
+                                    wine lover visiting the Southwest.
+                                </p>
+                                <div class="flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-copper to-golden-hour rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                        L
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-charcoal">Lisa Chen</div>
+                                        <div class="text-sm text-charcoal/60">Denver, CO</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl">Sonoran Wine Experiences</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Discover Arizona's hidden wine country in the heart of the Sonoran Desert
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.017.001z.017 0z"/>
+                        </svg>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2025 Sonoran Wine Experiences. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
