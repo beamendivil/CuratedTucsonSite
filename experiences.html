@@ -30,6 +30,10 @@
             --copper: #B87333;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, var(--cream) 0%, #F8F4ED 100%);
@@ -166,7 +170,7 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+    <nav id="top" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-2">
@@ -175,8 +179,9 @@
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="nav-link font-medium text-charcoal">Wine Regions</a>
-                    <a href="experiences.html" class="nav-link font-medium text-charcoal text-wine-burgundy">Experiences</a>
+                    <a href="index.html" class="nav-link font-medium text-charcoal">Home</a>
+                    <a href="index.html#wine-regions" class="nav-link font-medium text-charcoal">Wine Regions</a>
+                    <a href="experiences.html" class="nav-link font-medium text-wine-burgundy">Experiences</a>
                     <a href="pairing.html" class="nav-link font-medium text-charcoal">Pairing Guide</a>
                     <a href="about.html" class="nav-link font-medium text-charcoal">About</a>
                     <a href="wine-101.html" class="nav-link font-medium text-charcoal">Wine 101</a>
