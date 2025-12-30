@@ -467,9 +467,344 @@ function debounce(func, wait) {
     };
 }
 
+// ============================================
+// WINE 101 COURSE PLAYER
+// ============================================
+
+// Course curriculum data
+const courseData = {
+    'wine-basics': {
+        title: 'Wine Basics & Terminology',
+        slides: [
+            {
+                type: 'text',
+                title: 'Welcome to Wine 101',
+                content: `<p class="mb-4">Wine is simply fermented grape juice, but the variables in that process create infinite complexity. In this module, we will cover the fundamental language you need to describe wine to guests.</p>
+                          <div class="bg-cream p-4 rounded-lg border-l-4 border-wine-burgundy">
+                            <strong>Key Concept:</strong> Confidence sells wine. You don't need to know everything, you just need to know how to describe what you are selling.
+                          </div>`
+            },
+            {
+                type: 'text',
+                title: 'The 5 Structural Components',
+                content: `<ul class="space-y-4">
+                            <li><strong>Sweetness:</strong> Detected on the tip of the tongue. Is it dry (no sugar) or off-dry?</li>
+                            <li><strong>Acidity:</strong> The "pucker" factor. Makes your mouth water. Crucial for food pairing.</li>
+                            <li><strong>Tannin:</strong> Found in red wines. Dries out your mouth (like oversteeped tea). Comes from grape skins.</li>
+                            <li><strong>Alcohol:</strong> The "heat" felt in the back of the throat. Adds body.</li>
+                            <li><strong>Body:</strong> The weight of the wine (Skim milk vs. Whole milk vs. Cream).</li>
+                          </ul>`
+            },
+            {
+                type: 'quiz',
+                question: 'Which component is primarily responsible for the "drying" sensation in red wines?',
+                options: ['Acidity', 'Tannin', 'Alcohol', 'Sugar'],
+                correct: 1,
+                explanation: 'Tannins bind to proteins in your saliva, causing a drying or astringent sensation.'
+            }
+        ]
+    },
+    'wine-service': {
+        title: 'Professional Service Standards',
+        slides: [
+            { type: 'text', title: 'The Mise en Place', content: 'Always have your "tools" ready: A double-hinged corkscrew (wine key) and a clean polishing cloth (lith) are mandatory.' },
+            { 
+                type: 'text', 
+                title: 'Opening the Bottle', 
+                content: `<ol class="list-decimal pl-5 space-y-2">
+                            <li>Present the label to the host.</li>
+                            <li>Cut the foil under the second lip to prevent wine touching foil.</li>
+                            <li>Wipe the top of the cork.</li>
+                            <li>Insert screw, pull cork 90% out, finish by hand (silently).</li>
+                            <li>Wipe the bottle opening again.</li>
+                          </ol>` 
+            },
+            {
+                type: 'quiz',
+                question: 'Who should be served first at the table?',
+                options: ['The Host', 'The oldest person', 'Ladies, then Gentlemen', 'Whoever is closest'],
+                correct: 2,
+                explanation: 'Tradition dictates serving ladies first, then gentlemen, and the host last (regardless of gender).'
+            }
+        ]
+    },
+    'arizona-wines': {
+        title: 'Arizona Wine Regions',
+        slides: [
+            {
+                type: 'text',
+                title: 'Why Arizona?',
+                content: 'Arizona is a high-elevation desert region. This entails hot days and very cool nights (diurnal shift). This temperature swing allows grapes to ripen sugar (heat) while maintaining acidity (cool nights).'
+            },
+            {
+                type: 'text',
+                title: 'The 3 Major AVAs',
+                content: `<div class="grid gap-4">
+                            <div class="p-4 border rounded bg-gray-50"><strong>Sonoita (1984):</strong> Rolling grasslands, soil similar to Burgundy. Known for Pinot Noir and sparkling.</div>
+                            <div class="p-4 border rounded bg-gray-50"><strong>Willcox (2016):</strong> Produces 70% of AZ grapes. High desert playa. Rhone varietals thrive here (Syrah, Grenache).</div>
+                            <div class="p-4 border rounded bg-gray-50"><strong>Verde Valley (2021):</strong> North of Phoenix. Diverse microclimates. Strong tourism focus.</div>
+                          </div>`
+            },
+            {
+                type: 'quiz',
+                question: 'Which varietal is often considered Arizona\'s signature red?',
+                options: ['Cabernet Sauvignon', 'Pinot Noir', 'Syrah/Grenache', 'Merlot'],
+                correct: 2,
+                explanation: 'Rhone varietals like Syrah, Grenache, and Mourvedre thrive in Arizona\'s climate.'
+            }
+        ]
+    }
+};
+
+// Wine 101 state management
+let currentModuleId = null;
+let currentSlideIndex = 0;
+let userProgress = null;
+
+function initWine101() {
+    // Load progress from localStorage
+    userProgress = JSON.parse(localStorage.getItem('wine101_progress')) || {
+        'wine-basics': false,
+        'wine-service': false,
+        'arizona-wines': false,
+        'food-pairing': false,
+        'customer-service': false
+    };
+    
+    updateDashboardUI();
+    
+    const certDate = document.getElementById('cert-date');
+    if (certDate) {
+        certDate.textContent = new Date().toLocaleDateString();
+    }
+}
+
+function updateDashboardUI() {
+    if (!userProgress) return;
+    
+    // Update module cards with completion status
+    Object.keys(userProgress).forEach(moduleId => {
+        const card = document.querySelector(`[data-module="${moduleId}"]`);
+        if (card && userProgress[moduleId]) {
+            card.classList.add('completed');
+            const progressFill = card.querySelector('.progress-fill');
+            if (progressFill) progressFill.style.width = '100%';
+        }
+    });
+    
+    // Check if all modules complete for certificate
+    const completedCount = Object.values(userProgress).filter(Boolean).length;
+    const totalModules = Object.keys(userProgress).length;
+    
+    const certBtn = document.getElementById('view-certificate-btn');
+    if (certBtn) {
+        certBtn.disabled = completedCount < totalModules;
+    }
+}
+
+function startModule(moduleId) {
+    if (!courseData[moduleId]) {
+        alert('This module is coming soon!');
+        return;
+    }
+    currentModuleId = moduleId;
+    currentSlideIndex = 0;
+    
+    // Show Modal
+    const player = document.getElementById('course-player');
+    if (player) {
+        player.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    renderSlide();
+    buildOutline();
+}
+
+function closeCoursePlayer() {
+    const player = document.getElementById('course-player');
+    if (player) {
+        player.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+    updateDashboardUI();
+}
+
+function buildOutline() {
+    const outline = document.getElementById('course-outline');
+    if (!outline || !currentModuleId) return;
+    
+    const module = courseData[currentModuleId];
+    outline.innerHTML = module.slides.map((slide, index) => `
+        <div class="p-3 text-sm rounded cursor-pointer ${index === currentSlideIndex ? 'bg-wine-burgundy text-white' : 'text-charcoal hover:bg-gray-100'}"
+             onclick="jumpToSlide(${index})">
+             ${index + 1}. ${slide.title} ${slide.type === 'quiz' ? '❓' : ''}
+        </div>
+    `).join('');
+}
+
+function jumpToSlide(index) {
+    currentSlideIndex = index;
+    renderSlide();
+}
+
+function renderSlide() {
+    if (!currentModuleId) return;
+    
+    const module = courseData[currentModuleId];
+    const slide = module.slides[currentSlideIndex];
+    const stage = document.getElementById('content-stage');
+    
+    if (!stage) return;
+    
+    // Update Header Info
+    const moduleTitle = document.getElementById('player-module-title');
+    const slideCounter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('player-progress-bar');
+    
+    if (moduleTitle) moduleTitle.textContent = module.title;
+    if (slideCounter) slideCounter.textContent = `${currentSlideIndex + 1}/${module.slides.length}`;
+    
+    const percent = ((currentSlideIndex + 1) / module.slides.length) * 100;
+    if (progressBar) progressBar.style.width = `${percent}%`;
+
+    // Render Content based on Type
+    stage.style.opacity = '0';
+    
+    setTimeout(() => {
+        if (slide.type === 'text') {
+            stage.innerHTML = `
+                <h2 class="font-display text-3xl font-bold text-wine-burgundy mb-6">${slide.title}</h2>
+                <div class="prose prose-lg text-charcoal/80">
+                    ${slide.content}
+                </div>
+            `;
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) nextBtn.disabled = false;
+        } else if (slide.type === 'quiz') {
+            stage.innerHTML = `
+                <h2 class="font-display text-3xl font-bold text-charcoal mb-6">Knowledge Check</h2>
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-200">
+                    <p class="text-xl font-semibold mb-6">${slide.question}</p>
+                    <div class="space-y-3" id="current-quiz-options">
+                        ${slide.options.map((opt, i) => `
+                            <button onclick="checkAnswer(${i}, ${slide.correct}, '${slide.explanation.replace(/'/g, "\\'")}')" 
+                                class="w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-wine-burgundy transition-all bg-white">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="quiz-result" class="mt-6 hidden p-4 rounded-lg"></div>
+                </div>
+            `;
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) nextBtn.disabled = true;
+        }
+        
+        // Update Buttons
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        if (prevBtn) prevBtn.disabled = currentSlideIndex === 0;
+        if (nextBtn) {
+            nextBtn.textContent = currentSlideIndex === module.slides.length - 1 ? "Complete Module" : "Next";
+        }
+
+        stage.style.opacity = '1';
+        buildOutline();
+    }, 200);
+}
+
+function checkAnswer(selected, correct, explanation) {
+    const buttons = document.getElementById('current-quiz-options')?.children;
+    const resultBox = document.getElementById('quiz-result');
+    
+    if (!buttons || !resultBox) return;
+    
+    // Disable all buttons
+    for (let btn of buttons) btn.disabled = true;
+
+    if (selected === correct) {
+        buttons[selected].classList.add('bg-sage-green/10', 'border-sage-green');
+        resultBox.className = 'mt-6 p-4 rounded-lg bg-sage-green/10 text-sage-green block';
+        resultBox.innerHTML = `<strong>Correct!</strong> ${explanation}`;
+    } else {
+        buttons[selected].classList.add('bg-terracotta/10', 'border-terracotta');
+        buttons[correct].classList.add('bg-sage-green/10', 'border-sage-green');
+        resultBox.className = 'mt-6 p-4 rounded-lg bg-terracotta/10 text-terracotta block';
+        resultBox.innerHTML = `<strong>Incorrect.</strong> ${explanation}`;
+    }
+    
+    const nextBtn = document.getElementById('next-btn');
+    if (nextBtn) nextBtn.disabled = false;
+}
+
+function nextSlide() {
+    if (!currentModuleId) return;
+    
+    const module = courseData[currentModuleId];
+    if (currentSlideIndex < module.slides.length - 1) {
+        currentSlideIndex++;
+        renderSlide();
+    } else {
+        completeModule();
+    }
+}
+
+function prevSlide() {
+    if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        renderSlide();
+    }
+}
+
+function completeModule() {
+    // Save progress
+    if (userProgress && currentModuleId) {
+        userProgress[currentModuleId] = true;
+        localStorage.setItem('wine101_progress', JSON.stringify(userProgress));
+    }
+    
+    // Celebrate
+    const stage = document.getElementById('content-stage');
+    if (stage) {
+        stage.innerHTML = `
+            <div class="text-center py-12">
+                <div class="w-20 h-20 bg-sage-green text-white rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">✓</div>
+                <h2 class="font-display text-3xl font-bold text-charcoal mb-4">Module Complete!</h2>
+                <p class="text-lg text-charcoal/70 mb-8">Progress saved.</p>
+                <button onclick="closeCoursePlayer()" class="btn-primary px-8 py-3 rounded-lg font-medium">
+                    Back to Dashboard
+                </button>
+            </div>
+        `;
+    }
+}
+
+function showCertificate() {
+    const modal = document.getElementById('certificate-modal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeCertificate() {
+    const modal = document.getElementById('certificate-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
 // Export functions for use in other pages
 window.SonoranWine = {
     initWinePairing,
     initBookingCalendar,
+    initWine101,
     debounce
 };
+
+// Make Wine 101 functions globally available for onclick handlers
+window.startModule = startModule;
+window.closeCoursePlayer = closeCoursePlayer;
+window.jumpToSlide = jumpToSlide;
+window.checkAnswer = checkAnswer;
+window.nextSlide = nextSlide;
+window.prevSlide = prevSlide;
+window.showCertificate = showCertificate;
+window.closeCertificate = closeCertificate;

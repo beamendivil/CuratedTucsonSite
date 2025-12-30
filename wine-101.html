@@ -30,6 +30,10 @@
             --copper: #B87333;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, var(--cream) 0%, #F8F4ED 100%);
@@ -217,7 +221,7 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+    <nav id="top" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-2">
@@ -226,7 +230,8 @@
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="nav-link font-medium text-charcoal">Wine Regions</a>
+                    <a href="#top" class="nav-link font-medium text-charcoal">Home</a>
+                    <a href="#arizona-wines" class="nav-link font-medium text-charcoal">Wine Regions</a>
                     <a href="experiences.html" class="nav-link font-medium text-charcoal">Experiences</a>
                     <a href="pairing.html" class="nav-link font-medium text-charcoal">Pairing Guide</a>
                     <a href="about.html" class="nav-link font-medium text-charcoal">About</a>
@@ -374,7 +379,7 @@
                             </div>
                         </div>
                         
-                        <div class="module-card rounded-2xl p-6" data-module="arizona-wines">
+                        <div class="module-card rounded-2xl p-6" id="arizona-wines" data-module="arizona-wines">
                             <div class="flex items-center justify-between mb-3">
                                 <h4 class="font-semibold text-charcoal">3. Arizona Wine Regions</h4>
                                 <div class="certification-badge">3</div>
@@ -682,42 +687,83 @@
 
     <script src="main.js"></script>
     <script>
-        // Wine 101 specific functionality
-        function nextQuestion() {
-            alert('Quiz functionality would continue with more questions. This is a demo of the training interface.');
-        }
-        
-        // Module progress tracking
-        document.querySelectorAll('.module-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const progressBar = this.querySelector('.progress-fill');
-                if (progressBar) {
-                    progressBar.style.width = '100%';
-                    this.classList.add('completed');
-                }
-            });
-        });
-        
-        // Quiz functionality
-        document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', function() {
-                // Remove previous selections
-                document.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.classList.remove('correct', 'incorrect');
-                });
-                
-                // Mark this selection
-                if (this.dataset.answer === 'correct') {
-                    this.classList.add('correct');
-                    document.getElementById('quiz-feedback').style.display = 'block';
-                } else {
-                    this.classList.add('incorrect');
-                    // Show correct answer
-                    document.querySelector('[data-answer="correct"]').classList.add('correct');
-                    document.getElementById('quiz-feedback').style.display = 'block';
-                }
-            });
+        // Initialize Wine 101 course player on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.SonoranWine && window.SonoranWine.initWine101) {
+                window.SonoranWine.initWine101();
+            }
         });
     </script>
+    <div id="course-player" class="fixed inset-0 z-[100] hidden bg-white">
+    <div class="h-16 border-b border-gray-200 flex justify-between items-center px-4 md:px-6 bg-cream">
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <button onclick="closeCoursePlayer()" class="text-charcoal hover:text-wine-burgundy transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="h-6 w-px bg-gray-300 hidden sm:block"></div>
+            <span id="player-module-title" class="font-display font-bold text-sm md:text-lg text-charcoal truncate max-w-[150px] md:max-w-none">Module Title</span>
+        </div>
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <div class="text-xs md:text-sm text-charcoal/60 hidden sm:inline">Progress: <span id="slide-counter">1/5</span></div>
+            <div class="w-16 md:w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="player-progress-bar" class="h-full bg-wine-burgundy transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex h-[calc(100vh-4rem)]">
+        <div class="w-64 bg-gray-50 border-r border-gray-200 p-6 hidden md:block overflow-y-auto">
+            <h4 class="font-bold text-charcoal mb-4">Course Content</h4>
+            <div id="course-outline" class="space-y-2">
+                </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 relative bg-white">
+            <div id="content-stage" class="max-w-3xl mx-auto reveal-up">
+                </div>
+            
+            <div class="max-w-3xl mx-auto mt-8 md:mt-12 flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 md:pt-8 border-t border-gray-100">
+                <button id="prev-btn" onclick="prevSlide()" class="w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 rounded-lg border border-gray-300 text-charcoal hover:bg-gray-50 disabled:opacity-50 text-sm md:text-base">
+                    Previous
+                </button>
+                <button id="next-btn" onclick="nextSlide()" class="w-full sm:w-auto btn-primary px-6 md:px-8 py-2 md:py-3 rounded-lg font-medium disabled:opacity-50 text-sm md:text-base">
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="certificate-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-2 relative shadow-2xl reveal-up">
+        <button onclick="closeCertificate()" class="absolute top-4 right-4 text-charcoal hover:text-terracotta">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        
+        <div class="border-4 border-double border-wine-burgundy p-8 md:p-12 text-center h-full">
+            <div class="w-16 h-16 bg-wine-burgundy rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">🍇</span>
+            </div>
+            <h2 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-wine-burgundy mb-2">Certificate of Completion</h2>
+            <p class="text-charcoal/60 uppercase tracking-widest text-xs md:text-sm mb-6 md:mb-8">Arizona Wine Professional Program</p>
+            
+            <p class="text-base md:text-lg italic text-charcoal/80 mb-2">This certifies that</p>
+            <div class="text-xl md:text-2xl lg:text-3xl font-display font-bold text-charcoal border-b-2 border-charcoal/20 pb-2 mb-4 md:mb-6 inline-block min-w-[200px] md:min-w-[300px]" contenteditable="true">
+                Valued Staff Member
+            </div>
+            <p class="text-sm md:text-base lg:text-lg italic text-charcoal/80 mb-6 md:mb-8">Has successfully demonstrated mastery of Arizona Wine Knowledge & Service Standards.</p>
+            
+            <div class="flex justify-between items-end mt-12">
+                <div class="text-left">
+                    <div class="h-px w-40 bg-charcoal mb-2"></div>
+                    <p class="text-xs font-bold uppercase text-charcoal/60">Program Director</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-bold uppercase text-charcoal/60" id="cert-date">Date</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
