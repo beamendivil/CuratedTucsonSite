@@ -1,3 +1,6 @@
+
+
+
 // Main JavaScript for Sonoran Desert Wine Experiences
 // Handles all interactive features, animations, and user interactions
 
