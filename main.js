@@ -781,14 +781,106 @@ function completeModule() {
     }
 }
 
+// Generate unique certificate ID
+function generateCertificateID(name) {
+    // Simple hash function to create a "unique" looking ID like: AWP-2025-X7Z9
+    const dateCode = new Date().getFullYear();
+    const nameHash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const randomSegment = Math.floor(Math.random() * 10000).toString(16).toUpperCase();
+    return `AWP-${dateCode}-${nameHash}-${randomSegment}`;
+}
+
+// Download certificate as PDF
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const certificateElement = document.querySelector('#certificate-content');
+    
+    // Visual feedback that work is happening
+    const btn = document.getElementById('download-btn');
+    const originalText = btn.textContent;
+    btn.textContent = "Generating PDF...";
+    
+    html2canvas(certificateElement, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape, A4
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save("Arizona_Wine_Professional_Cert.pdf");
+        
+        btn.textContent = originalText;
+    });
+}
+
 function showCertificate() {
-    const modal = document.getElementById('certificate-modal');
-    if (modal) modal.classList.remove('hidden');
+    const studentName = prompt("Enter your full name for the certificate:");
+    if (!studentName) return;
+
+    const certID = generateCertificateID(studentName);
+    const dateStr = new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Inject data into the modal
+    const modalContent = document.getElementById('certificate-modal');
+    modalContent.innerHTML = `
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-4 relative shadow-2xl reveal-up">
+            <button onclick="closeCertificate()" class="absolute top-4 right-4 text-charcoal z-50 hover:text-terracotta">✕ Close</button>
+            
+            <div id="certificate-content" class="bg-white p-10 border-8 border-double border-wine-burgundy text-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
+                    <span class="text-[150px]">🍷</span>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="w-20 h-20 bg-wine-burgundy text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    
+                    <h1 class="font-display text-5xl font-bold text-wine-burgundy mb-2">Certificate of Completion</h1>
+                    <p class="text-charcoal/60 uppercase tracking-[0.3em] text-sm mb-12">Arizona Wine Professional Program</p>
+                    
+                    <p class="text-xl italic text-charcoal/80 mb-4">This certifies that</p>
+                    <h2 class="text-4xl font-display font-bold text-charcoal border-b-2 border-charcoal/20 pb-4 mb-8 inline-block px-12">
+                        ${studentName}
+                    </h2>
+                    
+                    <p class="text-lg text-charcoal/70 mb-12 max-w-2xl mx-auto leading-relaxed">
+                        Has successfully completed the Wine 101 curriculum, demonstrating proficiency in 
+                        <strong>Arizona Viticulture</strong>, <strong>Service Standards</strong>, and <strong>Sensory Analysis</strong>.
+                    </p>
+                    
+                    <div class="flex justify-between items-end mt-12 px-12">
+                        <div class="text-left">
+                            <div class="h-px w-48 bg-charcoal mb-3"></div>
+                            <p class="text-xs font-bold uppercase text-charcoal/60">Program Director</p>
+                            <p class="font-display text-lg">Sonoran Wine Exp.</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-mono text-charcoal/40 mb-1">ID: ${certID}</p>
+                            <p class="font-bold text-wine-burgundy">${dateStr}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-6">
+                <button id="download-btn" onclick="downloadPDF()" class="btn-primary px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                    Download Official PDF
+                </button>
+            </div>
+        </div>
+    `;
+    
+    modalContent.classList.remove('hidden');
+    modalContent.classList.add('flex');
 }
 
 function closeCertificate() {
     const modal = document.getElementById('certificate-modal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 }
 
 // Export functions for use in other pages
@@ -808,3 +900,5 @@ window.nextSlide = nextSlide;
 window.prevSlide = prevSlide;
 window.showCertificate = showCertificate;
 window.closeCertificate = closeCertificate;
+window.generateCertificateID = generateCertificateID;
+window.downloadPDF = downloadPDF;
