@@ -520,6 +520,25 @@ const courseData = {
                           </ol>` 
             },
             {
+                type: 'scenario',
+                title: 'The Improper Pour',
+                content: `
+                    <div class="bg-gray-100 p-4 rounded-lg italic mb-4">
+                        "You are serving a bottle of Arizona Syrah. You pour the host a taste. 
+                        They nod. You immediately move clockwise to fill everyone's glass, 
+                        filling them to the brim to be generous."
+                    </div>
+                    <p class="font-bold">What two mistakes did you make?</p>
+                `,
+                options: [
+                    'Did not wipe the bottle & filled too high.',
+                    'Moved clockwise & served host first.',
+                    'Served host first & filled too high.'
+                ],
+                correct: 2,
+                explanation: 'Never fill to the brim (swirl space is needed!) and always serve guests before returning to fill the host\'s glass.'
+            },
+            {
                 type: 'quiz',
                 question: 'Who should be served first at the table?',
                 options: ['The Host', 'The oldest person', 'Ladies, then Gentlemen', 'Whoever is closest'],
@@ -635,12 +654,18 @@ function buildOutline() {
     if (!outline || !currentModuleId) return;
     
     const module = courseData[currentModuleId];
-    outline.innerHTML = module.slides.map((slide, index) => `
-        <div class="p-3 text-sm rounded cursor-pointer ${index === currentSlideIndex ? 'bg-wine-burgundy text-white' : 'text-charcoal hover:bg-gray-100'}"
-             onclick="jumpToSlide(${index})">
-             ${index + 1}. ${slide.title} ${slide.type === 'quiz' ? '❓' : ''}
-        </div>
-    `).join('');
+    outline.innerHTML = module.slides.map((slide, index) => {
+        let icon = '';
+        if (slide.type === 'quiz') icon = '❓';
+        else if (slide.type === 'scenario') icon = '📋';
+        
+        return `
+            <div class="p-3 text-sm rounded cursor-pointer ${index === currentSlideIndex ? 'bg-wine-burgundy text-white' : 'text-charcoal hover:bg-gray-100'}"
+                 onclick="jumpToSlide(${index})">
+                 ${index + 1}. ${slide.title} ${icon}
+            </div>
+        `;
+    }).join('');
 }
 
 function jumpToSlide(index) {
@@ -681,6 +706,26 @@ function renderSlide() {
             `;
             const nextBtn = document.getElementById('next-btn');
             if (nextBtn) nextBtn.disabled = false;
+        } else if (slide.type === 'scenario') {
+            stage.innerHTML = `
+                <h2 class="font-display text-3xl font-bold text-terracotta mb-6">📋 Scenario: ${slide.title}</h2>
+                <div class="bg-white p-8 rounded-2xl border-2 border-terracotta/30 shadow-lg">
+                    <div class="mb-6">
+                        ${slide.content}
+                    </div>
+                    <div class="space-y-3" id="current-quiz-options">
+                        ${slide.options.map((opt, i) => `
+                            <button onclick="checkAnswer(${i}, ${slide.correct}, '${slide.explanation.replace(/'/g, "\\'")}')" 
+                                class="w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-terracotta transition-all bg-white">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="quiz-result" class="mt-6 hidden p-4 rounded-lg"></div>
+                </div>
+            `;
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) nextBtn.disabled = true;
         } else if (slide.type === 'quiz') {
             stage.innerHTML = `
                 <h2 class="font-display text-3xl font-bold text-charcoal mb-6">Knowledge Check</h2>
