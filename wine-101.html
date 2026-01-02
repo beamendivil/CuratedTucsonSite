@@ -3,26 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arizona Wine Professional | Certification Course</title>
-    <meta name="description" content="Professional wine training for Arizona restaurant staff. Master high-elevation viticulture, local AVAs, and service standards.">
+    <title>Wine 101 for Restaurant Staff | Professional Wine Training</title>
+    <meta name="description" content="Professional wine training for restaurant staff. Learn wine service, Arizona wine knowledge, tasting techniques, and customer service skills for hospitality professionals.">
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
+    <!-- Core Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     
+    <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         :root {
-            /* Arizona Terroir Palette */
             --desert-sandstone: #D4A574;
-            --wine-burgundy: #722F37; /* The color of a deep Willcox Mourvèdre */
-            --sage-green: #87A96B;    /* High desert scrub */
-            --terracotta: #B85450;    /* Sedona red rocks */
+            --wine-burgundy: #722F37;
+            --sage-green: #87A96B;
+            --terracotta: #B85450;
             --cream: #F5F1E8;
             --charcoal: #2C2C2C;
-            --copper: #B87333;        /* The Copper State */
+            --golden-hour: #E6B17A;
+            --copper: #B87333;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
@@ -32,563 +45,729 @@
         }
         
         .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
         
-        /* Custom UI Elements */
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(114, 47, 55, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/wine-tasting.jpg') center/cover no-repeat;
+            opacity: 0.7;
+            z-index: -1;
+        }
+        
+        .training-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .training-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(114, 47, 55, 0.15);
+            border-color: var(--wine-burgundy);
+        }
+        
+        .module-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--wine-burgundy);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .module-card:hover {
+            border-left-color: var(--terracotta);
+            transform: translateX(8px);
+        }
+        
+        .module-card.completed {
+            border-left-color: var(--sage-green);
+            background: rgba(135, 169, 107, 0.05);
+        }
+        
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--wine-burgundy);
+            background: rgba(114, 47, 55, 0.05);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--sage-green);
+            background: rgba(135, 169, 107, 0.1);
+        }
+        
+        .quiz-option.incorrect {
+            border-color: var(--terracotta);
+            background: rgba(184, 84, 80, 0.1);
+        }
+        
+        .aurora-bg {
+            background: linear-gradient(45deg, 
+                rgba(212, 165, 116, 0.1) 0%, 
+                rgba(230, 177, 122, 0.15) 25%, 
+                rgba(135, 169, 107, 0.1) 50%, 
+                rgba(114, 47, 55, 0.08) 75%, 
+                rgba(184, 84, 80, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: aurora 8s ease-in-out infinite;
+        }
+        
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--wine-burgundy);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--wine-burgundy);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
         .btn-primary {
             background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
             color: white;
             transition: all 0.3s ease;
         }
+        
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(114, 47, 55, 0.3);
         }
-
-        .module-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-left: 4px solid var(--wine-burgundy);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
         }
-        .module-card:hover {
-            border-left-color: var(--terracotta);
-            transform: translateX(8px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        
+        .reveal-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
         }
-
-        .certification-badge {
-            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
-            color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        /* Hero Background with Overlay */
-        .hero-bg {
-            background-color: var(--wine-burgundy);
-            background-image: url('https://images.unsplash.com/photo-1560159752-d77903823469?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); /* Placeholder vineyard image */
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        .hero-overlay {
-            background: linear-gradient(to right, rgba(44, 44, 44, 0.9), rgba(114, 47, 55, 0.7));
-        }
-
-        /* Progress Bar */
+        
         .progress-bar {
             background: rgba(212, 165, 116, 0.2);
             height: 8px;
             border-radius: 4px;
             overflow: hidden;
         }
+        
         .progress-fill {
-            background: var(--sage-green);
+            background: linear-gradient(90deg, var(--sage-green), var(--golden-hour));
             height: 100%;
             border-radius: 4px;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
+        }
+        
+        .certification-badge {
+            background: linear-gradient(135deg, var(--wine-burgundy), var(--terracotta));
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.3);
         }
     </style>
 </head>
 <body>
-
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+    <!-- Navigation -->
+    <nav id="top" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
-                    <span class="font-display font-bold text-xl text-charcoal">Sonoran Wine Expert</span>
+                    <span class="font-display font-bold text-xl text-charcoal">Sonoran Wine</span>
                 </div>
+                
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="font-medium text-charcoal hover:text-wine-burgundy">Modules</a>
-                    <a href="#" class="font-medium text-charcoal hover:text-wine-burgundy">About AZ Wine</a>
+                    <a href="index.html" class="nav-link font-medium text-charcoal">Home</a>
+                    <a href="index.html#wine-regions" class="nav-link font-medium text-charcoal">Wine Regions</a>
+                    <a href="experiences.html" class="nav-link font-medium text-charcoal">Experiences</a>
+                    <a href="pairing.html" class="nav-link font-medium text-charcoal">Pairing Guide</a>
+                    <a href="about.html" class="nav-link font-medium text-charcoal">About</a>
+                    <a href="wine-101.html" class="nav-link font-medium text-wine-burgundy">Wine 101</a>
                 </div>
-                <button onclick="scrollToModules()" class="btn-primary px-6 py-2 rounded-full font-medium text-sm">
-                    Start Certification
+                
+                <button class="btn-primary px-6 py-2 rounded-full font-medium">
+                    Get Certified
                 </button>
             </div>
         </div>
     </nav>
 
-    <section class="hero-bg h-[500px] flex items-center justify-center relative mt-16">
-        <div class="hero-overlay absolute inset-0"></div>
+    <!-- Hero Section -->
+    <section class="hero-bg h-96 flex items-center justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30"></div>
+        
         <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-            <h1 class="font-display text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                Arizona Wine Professional
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                Wine 101 for Restaurant Staff
             </h1>
-            <p class="text-lg md:text-xl opacity-90 leading-relaxed max-w-2xl mx-auto">
-                Move beyond the basics. Learn the high-elevation viticulture, unique terroir, and heroic winemaking that defines Arizona wine.
+            <p class="text-lg md:text-xl opacity-90 leading-relaxed">
+                Professional wine training designed for hospitality excellence
             </p>
         </div>
     </section>
 
-    <section id="modules" class="py-20">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="font-display text-4xl font-bold text-charcoal mb-4">Certification Modules</h2>
-                <p class="text-gray-600">Complete all 5 modules to earn your certificate.</p>
+    <!-- Training Overview -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Professional Wine Training
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Comprehensive wine education designed specifically for restaurant professionals. 
+                    Master wine service, Arizona wine knowledge, and customer interaction skills.
+                </p>
             </div>
             
-            <div class="space-y-4">
-                <div class="module-card rounded-2xl p-6" onclick="openPlayer('wine-basics')">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="certification-badge">1</div>
-                            <div>
-                                <h4 class="font-bold text-lg text-charcoal">AZ Wine Basics & Terminology</h4>
-                                <p class="text-sm text-gray-600">Diurnal shifts, monsoons, and the language of the high desert.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="training-card rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-wine-burgundy to-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Wine Service Excellence</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Master proper wine service techniques, glassware selection, temperature control, 
+                        and professional presentation standards.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 2 hours</div>
+                        <div>Certification included</div>
+                    </div>
+                    <button class="btn-primary px-6 py-3 rounded-lg font-medium w-full">Start Module</button>
+                </div>
+                
+                <div class="training-card rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-sage-green to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Arizona Wine Mastery</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Deep dive into Arizona's three AVAs, signature varietals, and unique terroir 
+                        characteristics that make our wines special.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 3 hours</div>
+                        <div>Tasting notes included</div>
+                    </div>
+                    <button class="btn-primary px-6 py-3 rounded-lg font-medium w-full">Start Module</button>
+                </div>
+                
+                <div class="training-card rounded-2xl p-8 text-center reveal-up">
+                    <div class="w-16 h-16 bg-gradient-to-br from-terracotta to-golden-hour rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal mb-4">Customer Interaction</h3>
+                    <p class="text-charcoal/70 mb-6 leading-relaxed">
+                        Learn professional wine recommendations, upselling techniques, and 
+                        customer service excellence for wine service.
+                    </p>
+                    <div class="text-sm text-charcoal/60 mb-4">
+                        <div>Duration: 1.5 hours</div>
+                        <div>Role-play scenarios</div>
+                    </div>
+                    <button class="btn-primary px-6 py-3 rounded-lg font-medium w-full">Start Module</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Training Modules -->
+    <section class="py-20 aurora-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Training Modules
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Complete these interactive modules to earn your Arizona Wine Professional certification. 
+                    Track your progress and test your knowledge.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Module List -->
+                <div class="reveal-up">
+                    <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Core Modules</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="module-card rounded-2xl p-6" data-module="wine-basics" onclick="startModule('wine-basics')" style="cursor: pointer;">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-charcoal">1. Wine Basics & Terminology</h4>
+                                <div class="certification-badge">1</div>
+                            </div>
+                            <p class="text-sm text-charcoal/70 mb-3">Learn fundamental wine vocabulary, tasting terms, and service language.</p>
+                            <div class="progress-bar mb-3">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-charcoal/60">
+                                <span>15 min</span>
+                                <span>Quiz: 10 questions</span>
                             </div>
                         </div>
-                        <button class="text-wine-burgundy font-semibold text-sm">Start &rarr;</button>
+                        
+                        <div class="module-card rounded-2xl p-6" data-module="wine-service" onclick="startModule('wine-service')" style="cursor: pointer;">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-charcoal">2. Professional Wine Service</h4>
+                                <div class="certification-badge">2</div>
+                            </div>
+                            <p class="text-sm text-charcoal/70 mb-3">Master proper wine opening, pouring, and presentation techniques.</p>
+                            <div class="progress-bar mb-3">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-charcoal/60">
+                                <span>25 min</span>
+                                <span>Quiz: 15 questions</span>
+                            </div>
+                        </div>
+                        
+                        <div class="module-card rounded-2xl p-6" id="arizona-wines" data-module="arizona-wines" onclick="startModule('arizona-wines')" style="cursor: pointer;">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-charcoal">3. Arizona Wine Regions</h4>
+                                <div class="certification-badge">3</div>
+                            </div>
+                            <p class="text-sm text-charcoal/70 mb-3">Explore Sonoita, Willcox, and Verde Valley AVAs and their signature wines.</p>
+                            <div class="progress-bar mb-3">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-charcoal/60">
+                                <span>35 min</span>
+                                <span>Quiz: 20 questions</span>
+                            </div>
+                        </div>
+                        
+                        <div class="module-card rounded-2xl p-6" data-module="food-pairing" onclick="startModule('food-pairing')" style="cursor: pointer;">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-charcoal">4. Food & Wine Pairing</h4>
+                                <div class="certification-badge">4</div>
+                            </div>
+                            <p class="text-sm text-charcoal/70 mb-3">Understand pairing principles and Arizona wine recommendations.</p>
+                            <div class="progress-bar mb-3">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-charcoal/60">
+                                <span>30 min</span>
+                                <span>Quiz: 15 questions</span>
+                            </div>
+                        </div>
+                        
+                        <div class="module-card rounded-2xl p-6" data-module="customer-service" onclick="startModule('customer-service')" style="cursor: pointer;">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-charcoal">5. Customer Service Excellence</h4>
+                                <div class="certification-badge">5</div>
+                            </div>
+                            <p class="text-sm text-charcoal/70 mb-3">Learn professional recommendations and upselling techniques.</p>
+                            <div class="progress-bar mb-3">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-charcoal/60">
+                                <span>20 min</span>
+                                <span>Final exam</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="module-card rounded-2xl p-6" onclick="openPlayer('wine-service')">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="certification-badge">2</div>
-                            <div>
-                                <h4 class="font-bold text-lg text-charcoal">Professional Desert Service</h4>
-                                <p class="text-sm text-gray-600">Temperature control, decanting heavy reds, and handling sediment.</p>
+                
+                <!-- Interactive Quiz -->
+                <div class="reveal-up">
+                    <div class="training-card rounded-2xl p-8">
+                        <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Knowledge Check</h3>
+                        
+                        <div id="quiz-container">
+                            <div class="quiz-question mb-6">
+                                <h4 class="font-semibold text-charcoal mb-4">Which Arizona AVA was established first?</h4>
+                                <div class="space-y-3">
+                                    <div class="quiz-option rounded-lg p-4" data-answer="correct">
+                                        <div class="flex items-center">
+                                            <div class="w-4 h-4 border-2 border-wine-burgundy rounded-full mr-3"></div>
+                                            <span>Sonoita AVA (1984)</span>
+                                        </div>
+                                    </div>
+                                    <div class="quiz-option rounded-lg p-4" data-answer="incorrect">
+                                        <div class="flex items-center">
+                                            <div class="w-4 h-4 border-2 border-wine-burgundy rounded-full mr-3"></div>
+                                            <span>Willcox AVA (2016)</span>
+                                        </div>
+                                    </div>
+                                    <div class="quiz-option rounded-lg p-4" data-answer="incorrect">
+                                        <div class="flex items-center">
+                                            <div class="w-4 h-4 border-2 border-wine-burgundy rounded-full mr-3"></div>
+                                            <span>Verde Valley AVA (2021)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 p-4 bg-sage-green/10 rounded-lg" style="display: none;" id="quiz-feedback">
+                                    <p class="text-sage-green font-medium">Correct! Sonoita AVA was Arizona's first, established in 1984.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm text-charcoal/60">Question 1 of 5</div>
+                                <button class="btn-primary px-6 py-2 rounded-lg font-medium" onclick="nextQuestion()">Next Question</button>
                             </div>
                         </div>
-                        <button class="text-wine-burgundy font-semibold text-sm">Start &rarr;</button>
-                    </div>
-                </div>
-
-                <div class="module-card rounded-2xl p-6" onclick="openPlayer('arizona-wines')">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="certification-badge">3</div>
-                            <div>
-                                <h4 class="font-bold text-lg text-charcoal">The 3 Great AVAs</h4>
-                                <p class="text-sm text-gray-600">Deep dive into Sonoita, Willcox, and the Verde Valley.</p>
-                            </div>
-                        </div>
-                        <button class="text-wine-burgundy font-semibold text-sm">Start &rarr;</button>
-                    </div>
-                </div>
-
-                <div class="module-card rounded-2xl p-6" onclick="openPlayer('food-pairing')">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="certification-badge">4</div>
-                            <div>
-                                <h4 class="font-bold text-lg text-charcoal">Southwestern Pairing</h4>
-                                <p class="text-sm text-gray-600">Pairing wines with chiles, heat, and Sonoran gastronomy.</p>
-                            </div>
-                        </div>
-                        <button class="text-wine-burgundy font-semibold text-sm">Start &rarr;</button>
-                    </div>
-                </div>
-
-                <div class="module-card rounded-2xl p-6" onclick="openPlayer('customer-service')">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="certification-badge">5</div>
-                            <div>
-                                <h4 class="font-bold text-lg text-charcoal">Telling the Story</h4>
-                                <p class="text-sm text-gray-600">Overcoming skepticism and selling the "Spirit of Experimentation."</p>
-                            </div>
-                        </div>
-                        <button class="text-wine-burgundy font-semibold text-sm">Start &rarr;</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div id="course-player" class="fixed inset-0 z-[100] hidden bg-white">
-        <div class="h-16 border-b border-gray-200 flex justify-between items-center px-6 bg-gray-50">
-            <div class="flex items-center space-x-4">
-                <button onclick="closeCoursePlayer()" class="text-charcoal hover:text-wine-burgundy">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Wine Service Techniques -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Professional Wine Service
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                    Master the art of professional wine service with step-by-step techniques and best practices 
+                    that will elevate your restaurant's wine program.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Service Steps -->
+                <div class="reveal-up">
+                    <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Service Steps</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="training-card rounded-2xl p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-wine-burgundy text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                                <div>
+                                    <h4 class="font-semibold text-charcoal mb-2">Present the Bottle</h4>
+                                    <p class="text-sm text-charcoal/70">Present the bottle to the host with the label facing them. Confirm it's the correct wine and vintage.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-wine-burgundy text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
+                                <div>
+                                    <h4 class="font-semibold text-charcoal mb-2">Cut the Foil</h4>
+                                    <p class="text-sm text-charcoal/70">Cut the foil cleanly below the lip of the bottle. Remove the foil and wipe the neck clean.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-wine-burgundy text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
+                                <div>
+                                    <h4 class="font-semibold text-charcoal mb-2">Remove the Cork</h4>
+                                    <p class="text-sm text-charcoal/70">Insert the corkscrew center, twist until one turn remains, and lever out the cork smoothly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-wine-burgundy text-white rounded-full flex items-center justify-center font-bold text-sm">4</div>
+                                <div>
+                                    <h4 class="font-semibold text-charcoal mb-2">Pour the Taste</h4>
+                                    <p class="text-sm text-charcoal/70">Pour a small taste for the host, twisting the bottle to prevent dripping.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-wine-burgundy text-white rounded-full flex items-center justify-center font-bold text-sm">5</div>
+                                <div>
+                                    <h4 class="font-semibold text-charcoal mb-2">Serve the Table</h4>
+                                    <p class="text-sm text-charcoal/70">Serve ladies first, then gentlemen, then the host. Fill glasses 1/3 to 1/2 full.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service Tips -->
+                <div class="reveal-up">
+                    <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Pro Tips</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="training-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-charcoal mb-3 flex items-center">
+                                <svg class="w-5 h-5 text-golden-hour mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Temperature Matters
+                            </h4>
+                            <p class="text-sm text-charcoal/70">Red wines: 60-65°F, White wines: 45-50°F, Sparkling: 38-45°F. Use appropriate glassware for each wine type.</p>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-charcoal mb-3 flex items-center">
+                                <svg class="w-5 h-5 text-golden-hour mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Arizona Wine Focus
+                            </h4>
+                            <p class="text-sm text-charcoal/70">Highlight Arizona's unique terroir: high elevation, desert climate, and mineral-rich soils. Mention specific AVAs and signature varietals.</p>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-charcoal mb-3 flex items-center">
+                                <svg class="w-5 h-5 text-golden-hour mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Customer Engagement
+                            </h4>
+                            <p class="text-sm text-charcoal/70">Ask about preferences, suggest food pairings, and share interesting facts about Arizona wines. Build confidence through knowledge.</p>
+                        </div>
+                        
+                        <div class="training-card rounded-2xl p-6">
+                            <h4 class="font-semibold text-charcoal mb-3 flex items-center">
+                                <svg class="w-5 h-5 text-golden-hour mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Upselling Techniques
+                            </h4>
+                            <p class="text-sm text-charcoal/70">Recommend premium Arizona wines, suggest bottle service for groups, and offer food pairing suggestions to enhance the dining experience.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certification Program -->
+    <section class="py-20 aurora-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-up">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                    Get Certified
+                </h2>
+                <p class="text-xl text-charcoal/80 mb-12 leading-relaxed">
+                    Earn your Arizona Wine Professional certification and demonstrate your expertise 
+                    to employers and customers.
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="training-card rounded-2xl p-8">
+                        <div class="certification-badge mx-auto mb-6">AWP</div>
+                        <h3 class="font-display text-xl font-bold text-charcoal mb-3">Complete Training</h3>
+                        <p class="text-charcoal/70 text-sm leading-relaxed">Finish all 5 training modules with 80% or higher quiz scores.</p>
+                    </div>
+                    
+                    <div class="training-card rounded-2xl p-8">
+                        <div class="certification-badge mx-auto mb-6">📝</div>
+                        <h3 class="font-display text-xl font-bold text-charcoal mb-3">Pass Final Exam</h3>
+                        <p class="text-charcoal/70 text-sm leading-relaxed">Successfully complete the comprehensive 50-question final examination.</p>
+                    </div>
+                    
+                    <div class="training-card rounded-2xl p-8">
+                        <div class="certification-badge mx-auto mb-6">🏆</div>
+                        <h3 class="font-display text-xl font-bold text-charcoal mb-3">Get Certified</h3>
+                        <p class="text-charcoal/70 text-sm leading-relaxed">Receive your digital certificate and Arizona Wine Professional badge.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card rounded-2xl p-8 mb-8">
+                    <h3 class="font-display text-2xl font-bold text-charcoal mb-6">Certification Benefits</h3>
+                    <div class="grid md:grid-cols-2 gap-6 text-left">
+                        <div>
+                            <h4 class="font-semibold text-charcoal mb-2">Professional Recognition</h4>
+                            <p class="text-sm text-charcoal/70 mb-4">Industry-recognized certification demonstrating wine expertise</p>
+                            
+                            <h4 class="font-semibold text-charcoal mb-2">Career Advancement</h4>
+                            <p class="text-sm text-charcoal/70 mb-4">Enhance your resume and increase earning potential</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-charcoal mb-2">Customer Confidence</h4>
+                            <p class="text-sm text-charcoal/70 mb-4">Build trust with customers through demonstrated knowledge</p>
+                            
+                            <h4 class="font-semibold text-charcoal mb-2">Staff Training Tool</h4>
+                            <p class="text-sm text-charcoal/70 mb-4">Use certification to train and develop your team</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn-primary px-8 py-4 rounded-full text-lg font-semibold">
+                    Start Certification Program
                 </button>
-                <div class="h-6 w-px bg-gray-300"></div>
-                <span id="player-module-title" class="font-display font-bold text-lg text-charcoal">Module Title</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span id="slide-counter" class="text-sm text-gray-600 font-medium">1 / 5</span>
-                <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div id="player-progress-bar" class="h-full bg-wine-burgundy transition-all duration-300" style="width: 0%"></div>
-                </div>
             </div>
         </div>
+    </section>
 
-        <div class="flex h-[calc(100vh-4rem)]">
-            <div class="w-64 bg-gray-50 border-r border-gray-200 p-6 hidden md:block overflow-y-auto">
-                <h4 class="font-bold text-charcoal mb-4 uppercase text-xs tracking-wider">Course Outline</h4>
-                <div id="sidebar-list" class="space-y-3 text-sm text-gray-600">
-                    </div>
-            </div>
-
-            <div class="flex-1 overflow-y-auto p-8 lg:p-16 flex flex-col justify-between">
-                <div id="content-stage" class="max-w-3xl mx-auto w-full">
-                    </div>
-                
-                <div class="max-w-3xl mx-auto w-full flex justify-between pt-8 border-t border-gray-100 mt-12">
-                    <button id="prev-btn" onclick="prevSlide()" class="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 transition-colors">Previous</button>
-                    <button id="next-btn" onclick="nextSlide()" class="btn-primary px-8 py-2 rounded-lg font-medium shadow-md">Next</button>
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-wine-burgundy to-terracotta"></div>
+                    <span class="font-display font-bold text-xl">Sonoran Wine Experiences</span>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="certificate-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-2xl max-w-3xl w-full p-2 relative shadow-2xl">
-            <button onclick="closeCertificate()" class="absolute top-4 right-4 text-gray-500 hover:text-red-500">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            
-            <div class="border-8 border-double border-wine-burgundy p-12 text-center bg-[#FFFAF0]">
-                <div class="w-20 h-20 bg-wine-burgundy rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-display font-bold">AZ</div>
-                <h2 class="font-display text-4xl md:text-5xl font-bold text-wine-burgundy mb-4">Certificate of Completion</h2>
-                <p class="text-charcoal/60 uppercase tracking-widest text-sm mb-8 font-bold">Sonoran Wine Expert Program</p>
-                
-                <p class="text-lg italic text-charcoal/80 mb-2">This certifies that</p>
-                <div class="text-3xl font-display font-bold text-charcoal border-b-2 border-charcoal/20 pb-2 mb-6 inline-block min-w-[300px]" contenteditable="true">
-                    Student Name
+                <p class="text-gray-400 mb-6">
+                    Professional wine training for Arizona's hospitality industry
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.017.001z.017 0z"/>
+                        </svg>
+                    </a>
                 </div>
-                <p class="text-lg italic text-charcoal/80 mb-8">Has mastered the high-elevation viticulture and unique terroir of Arizona.</p>
-                
-                <div class="flex justify-between items-end mt-12 px-12">
-                    <div class="text-left">
-                        <div class="h-px w-40 bg-charcoal mb-2"></div>
-                        <p class="text-xs font-bold uppercase text-charcoal/60">Program Director</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-xs font-bold uppercase text-charcoal/60" id="cert-date">2025</p>
-                    </div>
-                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2025 Sonoran Wine Experiences. All rights reserved.
+                </p>
             </div>
         </div>
-    </div>
+    </footer>
 
+    <script src="main.js"></script>
     <script>
-        // --- COURSE CONTENT DATA ---
-        // This data powers the modal window content
-        const courseData = {
-            "wine-basics": {
-                title: "Module 1: Wine Basics & Terminology",
-                slides: [
-                    {
-                        title: "The Language of the Desert",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">Mastering the Lexicon</h3>
-                            <p class="mb-4 text-lg">Before we serve, we must speak. While standard terms like <em>tannin</em> and <em>acidity</em> are universal, in Arizona we add specific descriptors to our vocabulary:</p>
-                            <ul class="space-y-3 mb-6">
-                                <li class="flex items-start"><span class="text-terracotta mr-2">Create graphic of sun and moon showing temperature drop</span> <strong>Diurnal Shift:</strong> The massive temperature drop between day and night (up to 50°F in Willcox) that preserves acidity in our grapes[cite: 2686].</li>
-                                <li class="flex items-start"><span class="text-terracotta mr-2">Create graphic of rain cloud over vineyard</span> <strong>Monsoon:</strong> Our unique summer rain season that creates challenges and miracles in the vineyard unlike anywhere else in the world.</li>
-                                <li class="flex items-start"><span class="text-terracotta mr-2">Create graphic of mountain showing elevation</span> <strong>High-Elevation Viticulture:</strong> Farming grapes at 4,000–5,000 ft, resulting in thicker skins and more intense phenolic grip[cite: 2677].</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: "Tasting Arizona: The 5 S's",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">What to Look For</h3>
-                            <p class="mb-4 text-lg">Standard tasting applies (See, Swirl, Smell, Sip, Savor), but when tasting Arizona wines, calibrate your palate for:</p>
-                            <div class="grid gap-4">
-                                <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-wine-burgundy">
-                                    <strong>Color:</strong> High UV exposure at 4,500 ft leads to deeper, darker hues in our reds due to thicker grape skins.
-                                </div>
-                                <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-sage-green">
-                                    <strong>Nose:</strong> Expect notes of 'dusty earth', 'dried herbs', and 'minerality' characteristic of our volcanic and alluvial soils.
-                                </div>
-                                <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-terracotta">
-                                    <strong>Palate:</strong> High alcohol is common due to intense sun, but look for the balancing "nervous" acid kept bright by our cool nights.
-                                </div>
-                            </div>
-                        `
-                    }
-                ]
-            },
-            "wine-service": {
-                title: "Module 2: Professional Wine Service",
-                slides: [
-                    {
-                        title: "Temperature Control",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">Fighting the Heat</h3>
-                            <p class="mb-4">In Southern Arizona, 'Room Temperature' is often 75°F+, which kills the nuance of red wine. Service standards here require vigilance:</p>
-                            <ul class="list-disc pl-5 space-y-2 mb-6">
-                                <li><strong>Reds:</strong> Serve slightly cooler than standard, around 60-62°F. The alcohol heat in high-ABV Arizona Grenache can overwhelm the fruit if served too warm.</li>
-                                <li><strong>Whites:</strong> Don't over-chill aromatic whites like Malvasia Bianca; 50-55°F allows the floral aromatics to bloom.</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: "Decanting Local Wines",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">Sediment and Oxygen</h3>
-                            <p class="mb-4">Many top Arizona producers (like Dos Cabezas or Rune) bottle unfiltered wines to preserve texture[cite: 2705].</p>
-                            <div class="p-4 bg-gray-50 rounded-lg mb-4">
-                                <strong>Sediment:</strong> Arizona reds can throw heavy sediment. Decanting is often mandatory, not just for air, but for clarity.
-                            </div>
-                            <div class="p-4 bg-gray-50 rounded-lg">
-                                <strong>Youth:</strong> Most local wines are consumed young. Aggressive decanting helps soften the 'nervous' energy of a young high-elevation wine.
-                            </div>
-                        `
-                    }
-                ]
-            },
-            "arizona-wines": {
-                title: "Module 3: Arizona Wine Regions",
-                slides: [
-                    {
-                        title: "A History of Resilience",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">From 16th Century to Today</h3>
-                            <p class="mb-4">While we are a 'New World' region, our roots run deep. Franciscan missionaries planted the first vines in the Southwest nearly 400 years ago[cite: 2081].</p>
-                            <p class="mb-4"><strong>The Modern Pioneer:</strong> Dr. Gordon Dutt, a soil scientist from UC Davis, proved in the 1970s that the Sonoita basin's soil was world-class terroir, leading to the state's first commercial vineyards[cite: 2685].</p>
-                            <p>Today, we have three distinct American Viticultural Areas (AVAs)[cite: 2676].</p>
-                        `
-                    },
-                    {
-                        title: "AVA 1: Sonoita (Est. 1984)",
-                        content: `
-                            <div class="mb-4 text-sm text-terracotta font-bold uppercase tracking-wider">The Historic Heart</div>
-                            <p class="mb-4">Create graphic of Sonoita AVA landscape with Mustang Mountains.</p>
-                            <p class="mb-4">Established in 1984 (one of the first in the US!), this AVA sits at nearly 5,000 ft elevation surrounded by the Santa Rita, Huachuca, and Whetstone mountains[cite: 2687].</p>
-                            <ul class="list-disc pl-5 space-y-2">
-                                <li><strong>Terroir:</strong> Rolling grasslands, reddish clay soils similar to Burgundy.</li>
-                                <li><strong>Key Grapes:</strong> Grenache, Syrah, Mourvèdre.</li>
-                                <li><strong>Notable Producers:</strong> Callaghan Vineyards (served in the White House 4 times) [cite: 2691], Dos Cabezas [cite: 2713], Rune[cite: 2704].</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: "AVA 2: Willcox (Est. 2016)",
-                        content: `
-                            <div class="mb-4 text-sm text-terracotta font-bold uppercase tracking-wider">The Powerhouse</div>
-                            <p class="mb-4">Create graphic of Willcox Bench vineyard soils.</p>
-                            <p class="mb-4">Designated in 2016, this high desert plain (4,000+ ft) produces 75% of the state's wine grapes[cite: 2784].</p>
-                            <ul class="list-disc pl-5 space-y-2">
-                                <li><strong>Terroir:</strong> A massive alluvial fan with sandy loam soils—perfect for drainage. Harsh conditions force vines to struggle.</li>
-                                <li><strong>Key Grapes:</strong> Cabernet Sauvignon, Malbec, Sangiovese.</li>
-                                <li><strong>Vibe:</strong> The 'Kansas Settlement'—rustic, farming-focused, vast[cite: 2786].</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: "AVA 3: Verde Valley (Est. 2021)",
-                        content: `
-                            <div class="mb-4 text-sm text-terracotta font-bold uppercase tracking-wider">The Northern Jewel</div>
-                            <p class="mb-4">Our newest AVA is a two-hour drive north of Phoenix. It's a high-desert valley defined by the Verde River[cite: 2741].</p>
-                            <ul class="list-disc pl-5 space-y-2">
-                                <li><strong>Key Features:</strong> Limestone-rich soils and dramatic diurnal shifts.</li>
-                                <li><strong>Key Players:</strong> Caduceus Cellars (Maynard James Keenan) [cite: 2747], Southwest Wine Center (the educational backbone)[cite: 2760].</li>
-                            </ul>
-                        `
-                    }
-                ]
-            },
-            "food-pairing": {
-                title: "Module 4: Food & Wine Pairing",
-                slides: [
-                    {
-                        title: "The Spicy Interaction",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">Pairing with Southwestern Heat</h3>
-                            <p class="mb-4">Create graphic of Chiltepin peppers and wine glass.</p>
-                            <p class="mb-4">Arizona cuisine uses chiles (Hatch, Chiltepin, Jalapeño). This is tricky for wine.</p>
-                            <div class="space-y-4">
-                                <div class="bg-red-50 p-4 rounded border-l-4 border-red-400">
-                                    <strong>The Rule:</strong> High alcohol amplifies heat (capsaicin burn).
-                                </div>
-                                <div class="bg-green-50 p-4 rounded border-l-4 border-green-400">
-                                    <strong>The Fix:</strong> Pair spicy dishes with wines that have residual sugar (like an off-dry Arizona Malvasia Bianca) or lower-tannin reds served cool (like a lighter Grenache). Avoid heavy, oaky Cabernet with super-spicy salsa.
-                                </div>
-                            </div>
-                        `
-                    },
-                    {
-                        title: "Regional Matches",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">What Grows Together Goes Together</h3>
-                            <ul class="space-y-4">
-                                <li>
-                                    <strong>Sonoran Wheat Bread & Butter:</strong> Pair with a rich, oxidative Arizona white blend (like Callaghan's 'Lisa's')[cite: 2694].
-                                </li>
-                                <li>
-                                    <strong>Mesquite-Grilled Steak:</strong> Needs a tannic heavyweight like a Willcox Malbec or Aglianico to cut the fat and smoke.
-                                </li>
-                                <li>
-                                    <strong>Street Tacos (Carnitas):</strong> A bright, high-acid Arizona Rosé (often made from Sangiovese or Grenache) cuts through the pork fat perfectly.
-                                </li>
-                            </ul>
-                        `
-                    }
-                ]
-            },
-            "customer-service": {
-                title: "Module 5: Customer Service Excellence",
-                slides: [
-                    {
-                        title: "We Are Storytellers",
-                        content: `
-                            <p class="mb-6 text-xl font-display italic text-gray-600">"We have an opportunity to tell a new story... we don't have to follow any trends." <br><span class="text-sm not-italic">- Pavle Milic, FnB / Los Milics [cite: 2670]</span></p>
-                            <p class="mb-4">When serving guests, focus on:</p>
-                            <ul class="list-disc pl-5 space-y-2">
-                                <li><strong>Educate:</strong> Most guests don't know AZ has 3 AVAs. Briefly explain the elevation (4000ft+)—it changes their perception immediately[cite: 2677].</li>
-                                <li><strong>Humanize:</strong> Mention the winemakers. Arizona is small enough that you likely know them. Share stories of Kent Callaghan's 30 vintages[cite: 2692].</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: "Handling Skepticism",
-                        content: `
-                            <h3 class="text-2xl font-display font-bold text-wine-burgundy mb-4">Winning Over the Napa Drinker</h3>
-                            <p class="mb-4">You will encounter guests who doubt Arizona wine quality. Here is your playbook:</p>
-                            <ol class="list-decimal pl-5 space-y-4">
-                                <li><strong>The Strategy:</strong> Don't argue; pour. Offer a 'blind' taste of a top Willcox Cabernet vs. a standard Napa Cab.</li>
-                                <li><strong>The Hook:</strong> Focus on the 'Spirit of Experimentation'. Explain that AZ is the frontier of wine[cite: 2668], exciting and unpredictable, whereas established regions are predictable.</li>
-                                <li><strong>The Facts:</strong> Remind them that Sonoita was an AVA just 3 years after Napa Valley[cite: 2687]. We aren't new; we're just undiscovered.</li>
-                            </ol>
-                        `
-                    }
-                ]
+        // Initialize Wine 101 course player on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.SonoranWine && window.SonoranWine.initWine101) {
+                window.SonoranWine.initWine101();
             }
-        };
-
-        // --- APP STATE ---
-        let state = {
-            currentModuleId: null,
-            currentSlideIndex: 0,
-            progress: {} 
-        };
-
-        // --- FUNCTIONS ---
-
-        function scrollToModules() {
-            document.getElementById('modules').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Open the Player
-        function openPlayer(moduleId) {
-            state.currentModuleId = moduleId;
-            state.currentSlideIndex = 0;
-            
-            const module = courseData[moduleId];
-            if (!module) return alert("Module coming soon!");
-
-            // Update UI
-            document.getElementById('player-module-title').innerText = module.title;
-            document.getElementById('course-player').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-
-            // Populate Sidebar
-            const sidebarList = document.getElementById('sidebar-list');
-            sidebarList.innerHTML = module.slides.map((slide, index) => `
-                <div class="p-2 hover:bg-gray-100 rounded cursor-pointer ${index === 0 ? 'text-wine-burgundy font-bold bg-pink-50' : ''}" onclick="jumpToSlide(${index})">
-                    ${index + 1}. ${slide.title}
-                </div>
-            `).join('');
-
-            renderSlide();
-        }
-
-        function closeCoursePlayer() {
-            document.getElementById('course-player').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            // Mark complete logic could go here
-            if (state.currentSlideIndex === courseData[state.currentModuleId].slides.length - 1) {
-                // simple visual feedback for demo
-                const badges = document.querySelectorAll(`[onclick="openPlayer('${state.currentModuleId}')"] .certification-badge`);
-                badges.forEach(b => {
-                    b.innerHTML = "✓";
-                    b.style.background = "#87A96B"; // Sage green
-                });
-            }
-        }
-
-        function renderSlide() {
-            const module = courseData[state.currentModuleId];
-            const slide = module.slides[state.currentSlideIndex];
-            
-            // Render Content
-            const stage = document.getElementById('content-stage');
-            stage.innerHTML = `
-                <div class="animate-fade-in">
-                    <h2 class="text-3xl font-display font-bold text-charcoal mb-8">${slide.title}</h2>
-                    <div class="prose prose-lg text-gray-600 max-w-none">
-                        ${slide.content}
-                    </div>
-                </div>
-            `;
-
-            // Update Progress UI
-            const total = module.slides.length;
-            const current = state.currentSlideIndex + 1;
-            document.getElementById('slide-counter').innerText = `${current} / ${total}`;
-            document.getElementById('player-progress-bar').style.width = `${(current / total) * 100}%`;
-
-            // Button States
-            const nextBtn = document.getElementById('next-btn');
-            document.getElementById('prev-btn').disabled = state.currentSlideIndex === 0;
-            
-            if (current === total) {
-                nextBtn.innerText = "Finish Module";
-                nextBtn.onclick = () => {
-                    closeCoursePlayer();
-                    if(state.currentModuleId === 'customer-service') {
-                        // If it's the last module, show certificate
-                        setTimeout(() => openCertificate(), 500);
-                    }
-                };
-            } else {
-                nextBtn.innerText = "Next";
-                nextBtn.onclick = nextSlide;
-            }
-            
-            // Update sidebar styling
-            const sidebarItems = document.getElementById('sidebar-list').children;
-            Array.from(sidebarItems).forEach((item, idx) => {
-                if (idx === state.currentSlideIndex) {
-                    item.classList.add('text-wine-burgundy', 'font-bold', 'bg-pink-50');
-                } else {
-                    item.classList.remove('text-wine-burgundy', 'font-bold', 'bg-pink-50');
-                }
-            });
-        }
-
-        function nextSlide() {
-            const module = courseData[state.currentModuleId];
-            if (state.currentSlideIndex < module.slides.length - 1) {
-                state.currentSlideIndex++;
-                renderSlide();
-            }
-        }
-
-        function prevSlide() {
-            if (state.currentSlideIndex > 0) {
-                state.currentSlideIndex--;
-                renderSlide();
-            }
-        }
-
-        function jumpToSlide(index) {
-            state.currentSlideIndex = index;
-            renderSlide();
-        }
-
-        // --- CERTIFICATE LOGIC ---
-        function openCertificate() {
-            const date = new Date();
-            document.getElementById('cert-date').innerText = date.toLocaleDateString();
-            document.getElementById('certificate-modal').classList.remove('hidden');
-        }
-
-        function closeCertificate() {
-            document.getElementById('certificate-modal').classList.add('hidden');
-        }
-
+        });
     </script>
+    <div id="course-player" class="fixed inset-0 z-[100] hidden bg-white">
+    <div class="h-16 border-b border-gray-200 flex justify-between items-center px-4 md:px-6 bg-cream">
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <button onclick="closeCoursePlayer()" class="text-charcoal hover:text-wine-burgundy transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="h-6 w-px bg-gray-300 hidden sm:block"></div>
+            <span id="player-module-title" class="font-display font-bold text-sm md:text-lg text-charcoal truncate max-w-[150px] md:max-w-none">Module Title</span>
+        </div>
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <div class="text-xs md:text-sm text-charcoal/60 hidden sm:inline">Progress: <span id="slide-counter">1/5</span></div>
+            <div class="w-16 md:w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="player-progress-bar" class="h-full bg-wine-burgundy transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex h-[calc(100vh-4rem)]">
+        <div class="w-64 bg-gray-50 border-r border-gray-200 p-6 hidden md:block overflow-y-auto">
+            <h4 class="font-bold text-charcoal mb-4">Course Content</h4>
+            <div id="course-outline" class="space-y-2">
+                </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 relative bg-white">
+            <div id="content-stage" class="max-w-3xl mx-auto reveal-up">
+                </div>
+            
+            <div class="max-w-3xl mx-auto mt-8 md:mt-12 flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 md:pt-8 border-t border-gray-100">
+                <button id="prev-btn" onclick="prevSlide()" class="w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 rounded-lg border border-gray-300 text-charcoal hover:bg-gray-50 disabled:opacity-50 text-sm md:text-base">
+                    Previous
+                </button>
+                <button id="next-btn" onclick="nextSlide()" class="w-full sm:w-auto btn-primary px-6 md:px-8 py-2 md:py-3 rounded-lg font-medium disabled:opacity-50 text-sm md:text-base">
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="certificate-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-2 relative shadow-2xl reveal-up">
+        <button onclick="closeCertificate()" class="absolute top-4 right-4 text-charcoal hover:text-terracotta">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        
+        <div class="border-4 border-double border-wine-burgundy p-8 md:p-12 text-center h-full">
+            <div class="w-16 h-16 bg-wine-burgundy rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-3xl">🍇</span>
+            </div>
+            <h2 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-wine-burgundy mb-2">Certificate of Completion</h2>
+            <p class="text-charcoal/60 uppercase tracking-widest text-xs md:text-sm mb-6 md:mb-8">Arizona Wine Professional Program</p>
+            
+            <p class="text-base md:text-lg italic text-charcoal/80 mb-2">This certifies that</p>
+            <div class="text-xl md:text-2xl lg:text-3xl font-display font-bold text-charcoal border-b-2 border-charcoal/20 pb-2 mb-4 md:mb-6 inline-block min-w-[200px] md:min-w-[300px]" contenteditable="true">
+                Valued Staff Member
+            </div>
+            <p class="text-sm md:text-base lg:text-lg italic text-charcoal/80 mb-6 md:mb-8">Has successfully demonstrated mastery of Arizona Wine Knowledge & Service Standards.</p>
+            
+            <div class="flex justify-between items-end mt-12">
+                <div class="text-left">
+                    <div class="h-px w-40 bg-charcoal mb-2"></div>
+                    <p class="text-xs font-bold uppercase text-charcoal/60">Program Director</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-bold uppercase text-charcoal/60" id="cert-date">Date</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
