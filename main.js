@@ -837,13 +837,19 @@ function generateCertificateID(name) {
 
 // Download certificate as PDF
 function downloadPDF() {
-    const { jsPDF } = window.jspdf;
+    const { jsPDF } = (window.jspdf || {});
+    const { html2canvas } = window;
     const certificateElement = document.querySelector('#certificate-content');
+
+    if (!jsPDF || !html2canvas || !certificateElement) {
+        console.error('PDF dependencies missing or certificate element not found');
+        return;
+    }
     
     // Visual feedback that work is happening
     const btn = document.getElementById('download-btn');
-    const originalText = btn.textContent;
-    btn.textContent = "Generating PDF...";
+    const originalText = btn ? btn.textContent : '';
+    if (btn) btn.textContent = "Generating PDF...";
     
     html2canvas(certificateElement, { scale: 2 }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
@@ -853,8 +859,8 @@ function downloadPDF() {
         
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save("Arizona_Wine_Professional_Cert.pdf");
-        
-        btn.textContent = originalText;
+
+        if (btn) btn.textContent = originalText;
     });
 }
 
