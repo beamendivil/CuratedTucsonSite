@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Mediterranean cuisine</title>
+  <desc id="desc">Olives, tomatoes, flatbread, and herbs on a plate.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="132" width="400" height="68" fill="#e6b17a" opacity=".7"/>
+  <ellipse cx="205" cy="112" rx="130" ry="50" fill="#fffaf0"/>
+  <circle cx="164" cy="101" r="14" fill="#87a96b"/>
+  <circle cx="188" cy="123" r="12" fill="#87a96b"/>
+  <circle cx="244" cy="99" r="13" fill="#b85450"/>
+  <circle cx="267" cy="121" r="11" fill="#b85450"/>
+  <path d="M113 132l78-62 39 65z" fill="#d4a574"/>
+  <path d="M112 132h118" stroke="#b87333" stroke-width="5"/>
+  <path d="M292 76c13 20 12 40-3 61" stroke="#87a96b" stroke-width="5" stroke-linecap="round"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Mediterranean Cuisine</text>
+</svg>

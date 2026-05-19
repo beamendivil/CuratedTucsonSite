@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="title desc">
+  <title id="title">Alcantara Vineyards river landscape</title>
+  <desc id="desc">A central Arizona vineyard near a river with cottonwoods and tasting grounds.</desc>
+  <rect width="800" height="400" fill="#f5f1e8"/>
+  <path d="M0 150c142-58 285-76 434-30 103 32 213 17 366-42v322H0z" fill="#d4a574"/>
+  <path d="M0 262c143-30 238-24 350 19 120 46 248 47 450-8v78c-194 52-339 58-477 7-103-38-196-44-323-17z" fill="#87a96b" opacity=".55"/>
+  <path d="M0 299c120-36 220-30 327 14 135 55 274 54 473-9v96H0z" fill="#6fa6b8" opacity=".7"/>
+  <g stroke="#722f37" stroke-width="4" opacity=".35">
+    <path d="M61 252c97-45 214-70 358-78"/>
+    <path d="M190 266c97-45 217-72 366-82"/>
+    <path d="M320 286c87-42 194-68 332-81"/>
+  </g>
+  <rect x="126" y="166" width="206" height="75" rx="6" fill="#fffaf0"/>
+  <path d="M113 166h234l-39-44H151z" fill="#b85450"/>
+  <rect x="164" y="190" width="42" height="51" fill="#722f37" opacity=".75"/>
+  <rect x="227" y="190" width="67" height="27" fill="#d4a574"/>
+  <g fill="#87a96b">
+    <circle cx="597" cy="165" r="33"/>
+    <circle cx="637" cy="151" r="27"/>
+    <circle cx="674" cy="171" r="31"/>
+  </g>
+  <g stroke="#2c2c2c" stroke-width="8" stroke-linecap="round">
+    <path d="M632 178v75"/>
+    <path d="M668 189v64"/>
+  </g>
+  <text x="48" y="64" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#722f37">Alcantara Vineyards</text>
+  <text x="50" y="103" font-family="Inter, Arial, sans-serif" font-size="20" fill="#2c2c2c">Verde River access · vineyard grounds</text>
+</svg>

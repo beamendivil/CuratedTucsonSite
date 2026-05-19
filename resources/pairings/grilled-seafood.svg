@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Grilled seafood</title>
+  <desc id="desc">Grilled fish and shrimp with citrus slices.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="130" width="400" height="70" fill="#87a96b" opacity=".45"/>
+  <path d="M111 102c39-45 106-45 155 0-49 45-116 45-155 0z" fill="#d4a574"/>
+  <circle cx="237" cy="96" r="5" fill="#2c2c2c"/>
+  <path d="M111 102l-35-26v52z" fill="#b87333"/>
+  <path d="M148 76l83 54M170 70l80 51M131 97l90 57" stroke="#2c2c2c" stroke-width="4" opacity=".35"/>
+  <path d="M296 118c25-18 47-9 51 8-23 9-43 6-51-8z" fill="#b85450"/>
+  <circle cx="82" cy="55" r="24" fill="#e6b17a"/>
+  <path d="M82 31v48M58 55h48M65 38l34 34M99 38L65 72" stroke="#fffaf0" stroke-width="3"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Grilled Seafood</text>
+</svg>

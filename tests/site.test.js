@@ -55,6 +55,31 @@ test('all public pages use the current brand and shared assets', () => {
     }
 });
 
+test('pairing cards use local relevant food images instead of placeholders', () => {
+    const pairingHtml = readProjectFile('pairing.html');
+
+    assert.doesNotMatch(pairingHtml, /picsum\.photos/);
+    assert.match(pairingHtml, /resources\/pairings\/creamy-pasta\.svg/);
+    assert.match(pairingHtml, /resources\/pairings\/mesquite-steak\.svg/);
+    assert.match(pairingHtml, /resources\/pairings\/goat-cheese-herbs\.svg/);
+});
+
+test('featured winery carousel uses local relevant winery images', () => {
+    const homepageHtml = readProjectFile('index.html');
+    const carouselHtml = homepageHtml.slice(
+        homepageHtml.indexOf('id="winery-carousel"'),
+        homepageHtml.indexOf('<!-- Experience Preview -->')
+    );
+
+    assert.ok(carouselHtml.length > 0, 'winery carousel markup should be present');
+    assert.doesNotMatch(carouselHtml, /picsum\.photos/);
+    assert.match(carouselHtml, /resources\/wineries\/los-milics-vineyards\.svg/);
+    assert.match(carouselHtml, /resources\/wineries\/rune-wines\.svg/);
+    assert.match(carouselHtml, /resources\/wineries\/alcantara-vineyards\.svg/);
+    assert.match(carouselHtml, /resources\/wineries\/dos-cabezas-wineworks\.svg/);
+    assert.match(carouselHtml, /resources\/wineries\/page-springs-cellars\.svg/);
+});
+
 test('local links and local image assets resolve', () => {
     for (const page of pages) {
         const html = readProjectFile(page);

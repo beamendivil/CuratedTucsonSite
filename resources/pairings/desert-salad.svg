@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Desert salad</title>
+  <desc id="desc">A salad with greens, citrus, and prickly pear accents.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="132" width="400" height="68" fill="#87a96b" opacity=".35"/>
+  <ellipse cx="205" cy="115" rx="132" ry="50" fill="#fffaf0"/>
+  <ellipse cx="168" cy="103" rx="45" ry="16" fill="#87a96b" transform="rotate(-22 168 103)"/>
+  <ellipse cx="218" cy="119" rx="52" ry="17" fill="#87a96b" transform="rotate(12 218 119)"/>
+  <ellipse cx="255" cy="96" rx="44" ry="15" fill="#87a96b" transform="rotate(-10 255 96)"/>
+  <circle cx="181" cy="124" r="13" fill="#b85450"/>
+  <circle cx="237" cy="100" r="12" fill="#e6b17a"/>
+  <circle cx="282" cy="123" r="9" fill="#b85450"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Desert Salad</text>
+</svg>

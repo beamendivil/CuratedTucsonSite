@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Spiced dishes</title>
+  <desc id="desc">A warm bowl with chile, herbs, and aromatic spices.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="138" width="400" height="62" fill="#d4a574"/>
+  <ellipse cx="204" cy="114" rx="125" ry="53" fill="#fffaf0"/>
+  <ellipse cx="204" cy="107" rx="93" ry="34" fill="#b85450"/>
+  <circle cx="157" cy="99" r="8" fill="#e6b17a"/>
+  <circle cx="207" cy="110" r="7" fill="#722f37"/>
+  <circle cx="246" cy="93" r="9" fill="#e6b17a"/>
+  <path d="M271 56c23 9 31 25 25 48" fill="none" stroke="#722f37" stroke-width="6" stroke-linecap="round"/>
+  <path d="M115 70c17 12 25 26 23 44" fill="none" stroke="#87a96b" stroke-width="5" stroke-linecap="round"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Spiced Dishes</text>
+</svg>

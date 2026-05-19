@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="title desc">
+  <title id="title">Los Milics Vineyards tasting room</title>
+  <desc id="desc">A modern desert tasting room with vineyard rows and mountain views.</desc>
+  <rect width="800" height="400" fill="#f5f1e8"/>
+  <path d="M0 158c122-61 219-73 338-31 103 36 196 27 462-57v330H0z" fill="#d4a574"/>
+  <path d="M0 151c150-84 272-88 420-40 113 37 198 20 380-54v68c-162 69-277 82-404 42-137-43-249-36-396 39z" fill="#87a96b" opacity=".55"/>
+  <path d="M0 233h800v167H0z" fill="#e6b17a"/>
+  <g stroke="#722f37" stroke-width="4" opacity=".45">
+    <path d="M34 381c116-84 210-127 329-163"/>
+    <path d="M151 400c86-70 176-117 294-156"/>
+    <path d="M286 400c68-54 151-96 265-132"/>
+    <path d="M439 400c48-39 119-75 226-111"/>
+  </g>
+  <rect x="128" y="153" width="300" height="106" rx="8" fill="#2c2c2c"/>
+  <path d="M118 153h329l-42-58H160z" fill="#722f37"/>
+  <rect x="160" y="180" width="86" height="79" fill="#f5f1e8" opacity=".8"/>
+  <rect x="270" y="180" width="117" height="43" fill="#f5f1e8" opacity=".7"/>
+  <path d="M515 132h195l48 127H557z" fill="#fffaf0" opacity=".75"/>
+  <path d="M525 132h183l-24-47H551z" fill="#b85450"/>
+  <text x="48" y="62" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#722f37">Los Milics Vineyards</text>
+  <text x="50" y="101" font-family="Inter, Arial, sans-serif" font-size="20" fill="#2c2c2c">modern tasting room · mountain views</text>
+</svg>

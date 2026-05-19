@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Butter-poached lobster</title>
+  <desc id="desc">A lobster tail with butter sauce and lemon.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="132" width="400" height="68" fill="#d4a574" opacity=".6"/>
+  <ellipse cx="205" cy="115" rx="128" ry="48" fill="#fffaf0"/>
+  <path d="M150 126c15-51 94-62 111 0-28 21-80 22-111 0z" fill="#b85450"/>
+  <path d="M172 83c12 33 48 33 67 0M165 101h85M158 119h99" stroke="#f5f1e8" stroke-width="5" fill="none"/>
+  <circle cx="292" cy="74" r="23" fill="#e6b17a"/>
+  <path d="M292 51v46M269 74h46M276 58l32 32M308 58l-32 32" stroke="#fffaf0" stroke-width="3"/>
+  <path d="M101 131c31-22 54-23 81-1" stroke="#e6b17a" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Butter-Poached Lobster</text>
+</svg>

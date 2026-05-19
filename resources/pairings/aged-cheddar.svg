@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Aged cheddar</title>
+  <desc id="desc">A wedge of aged cheddar with crackers and a small garnish.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="135" width="400" height="65" fill="#87a96b" opacity=".65"/>
+  <path d="M85 130l174-72 60 31-170 76z" fill="#e6b17a"/>
+  <path d="M149 165l170-76v42l-170 58z" fill="#d4a574"/>
+  <circle cx="166" cy="124" r="8" fill="#b87333" opacity=".45"/>
+  <circle cx="215" cy="103" r="6" fill="#b87333" opacity=".45"/>
+  <circle cx="254" cy="88" r="7" fill="#b87333" opacity=".45"/>
+  <circle cx="81" cy="77" r="22" fill="#d4a574"/>
+  <circle cx="331" cy="151" r="24" fill="#d4a574"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Aged Cheddar</text>
+</svg>

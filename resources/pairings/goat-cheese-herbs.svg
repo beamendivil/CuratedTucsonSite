@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Goat cheese and herbs</title>
+  <desc id="desc">Rounds of goat cheese with fresh herbs.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="132" width="400" height="68" fill="#87a96b" opacity=".45"/>
+  <circle cx="157" cy="108" r="39" fill="#fffaf0" stroke="#d4a574" stroke-width="6"/>
+  <circle cx="226" cy="113" r="43" fill="#fffaf0" stroke="#d4a574" stroke-width="6"/>
+  <circle cx="273" cy="96" r="31" fill="#fffaf0" stroke="#d4a574" stroke-width="5"/>
+  <path d="M93 67c35 10 55 34 62 72" stroke="#87a96b" stroke-width="6" stroke-linecap="round"/>
+  <path d="M111 82l-20-19M126 99l-23-18M139 119l-24-13" stroke="#87a96b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M296 135c22-17 39-37 49-63" stroke="#87a96b" stroke-width="5" stroke-linecap="round"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Goat Cheese &amp; Herbs</text>
+</svg>

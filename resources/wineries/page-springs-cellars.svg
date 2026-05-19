@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="title desc">
+  <title id="title">Page Springs Cellars creekside tasting room</title>
+  <desc id="desc">A creekside Verde Valley tasting room with trees, patio, and vines.</desc>
+  <rect width="800" height="400" fill="#f5f1e8"/>
+  <path d="M0 166c137-57 250-61 363-32 143 37 277 12 437-61v327H0z" fill="#d4a574"/>
+  <path d="M0 286c150-35 252-29 368 17 120 48 250 47 432-12v109H0z" fill="#6fa6b8" opacity=".65"/>
+  <path d="M0 242h800v49c-170 50-304 55-424 18-143-44-238-54-376-18z" fill="#87a96b" opacity=".45"/>
+  <rect x="141" y="166" width="258" height="95" rx="7" fill="#fffaf0"/>
+  <path d="M127 166h288l-46-55H173z" fill="#722f37"/>
+  <rect x="184" y="198" width="69" height="63" fill="#b85450" opacity=".75"/>
+  <rect x="278" y="197" width="82" height="34" fill="#d4a574"/>
+  <g fill="#87a96b">
+    <circle cx="561" cy="142" r="43"/>
+    <circle cx="616" cy="135" r="39"/>
+    <circle cx="673" cy="155" r="45"/>
+  </g>
+  <g stroke="#2c2c2c" stroke-width="9" stroke-linecap="round">
+    <path d="M607 169v105"/>
+    <path d="M670 181v93"/>
+  </g>
+  <g stroke="#722f37" stroke-width="4" opacity=".35">
+    <path d="M82 375c120-62 244-101 388-118"/>
+    <path d="M242 400c93-55 195-91 327-112"/>
+  </g>
+  <text x="48" y="64" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#722f37">Page Springs Cellars</text>
+  <text x="50" y="103" font-family="Inter, Arial, sans-serif" font-size="20" fill="#2c2c2c">creekside tasting · Verde Valley trees</text>
+</svg>

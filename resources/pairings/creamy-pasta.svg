@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-labelledby="title desc">
+  <title id="title">Creamy pasta</title>
+  <desc id="desc">A bowl of creamy pasta ribbons with herbs.</desc>
+  <rect width="400" height="200" fill="#f5f1e8"/>
+  <rect x="0" y="134" width="400" height="66" fill="#e6b17a" opacity=".75"/>
+  <ellipse cx="205" cy="118" rx="128" ry="50" fill="#fffaf0"/>
+  <path d="M123 104c50-37 120 40 174-2M126 124c56-43 118 39 164 2M151 92c37 35 85 39 133 0M151 136c39-32 83-31 127 3" stroke="#d4a574" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M142 105c47-31 98 31 146 2M151 128c39-24 83 20 126 0" stroke="#f5f1e8" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <circle cx="261" cy="88" r="6" fill="#87a96b"/>
+  <circle cx="178" cy="139" r="5" fill="#87a96b"/>
+  <text x="30" y="38" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#722f37">Creamy Pasta</text>
+</svg>
