@@ -15,6 +15,8 @@ https://beamendivil.github.io/CuratedTucsonSite/
 
 If the repository is renamed later, update this URL to match the new GitHub Pages path.
 
+The Yelp-enabled deployment target is Vercel because Yelp requires a server-side proxy for `YELP_API_KEY`.
+
 ## Why I Built It
 
 The goal was to turn a visual tourism concept into a more resume-ready front-end project: a site with brand consistency, documented tradeoffs, basic automated checks, and several client-side interactions that can be reviewed without a backend.
@@ -22,7 +24,7 @@ The goal was to turn a visual tourism concept into a more resume-ready front-end
 ## Tech Stack
 
 - HTML, CSS, and vanilla JavaScript
-- Tailwind CDN for layout utilities
+- Tailwind CLI for compiled production CSS
 - Anime.js, Typed.js, Splide, ECharts, html2canvas, and jsPDF
 - Node test runner, ESLint, and Prettier
 - GitHub Actions and GitHub Pages
@@ -30,11 +32,15 @@ The goal was to turn a visual tourism concept into a more resume-ready front-end
 ## Implemented Features
 
 - Responsive five-page site: home, experiences, pairing guide, about, and Wine 101.
+- Compiled Tailwind CSS loaded locally instead of the Tailwind CDN.
 - Shared brand/design layer in `styles.css` for color tokens, focus states, gradients, and reduced-motion support.
 - Interactive wine-region explorer on the homepage.
 - Wine pairing guide that filters food recommendations by selected varietal.
 - Booking prototype with generated calendar dates, available time-slot modal, and non-destructive form feedback.
 - Wine 101 course player with modules, quizzes, local progress persistence, and certificate PDF generation.
+- Backend-ready service layer for catalog queries, booking requests, auth-gated favorites, and course progress.
+- Server-side Yelp API integration boundary with request normalization and tests.
+- Framework-agnostic state store that models session, catalog, booking, favorite, and course-progress state.
 - Automated checks for linting, formatting, local link integrity, asset references, brand consistency, and critical interactive hooks.
 
 ## Not Yet Implemented
@@ -69,8 +75,10 @@ npm run check
 
 This runs:
 
+- `npm run build:css`
 - `npm run lint`
 - `npm run test`
+- `npm run test:e2e`
 - `npm run format:check`
 
 ## Testing
@@ -103,6 +111,15 @@ Accessibility work is tracked in `docs/accessibility.md`. Current implementation
 - Added a shared CSS layer because the Tailwind CDN does not know custom project tokens like `text-charcoal` or `bg-wine-burgundy`.
 - Documented prototype boundaries clearly so design concepts are not mistaken for production backend functionality.
 - Added static smoke tests before introducing a heavier browser testing stack.
+- Added a service/store boundary before the React migration so backend data flows can be tested independently from UI rendering.
+
+## Backend And State Architecture
+
+See `docs/backend-architecture.md` and `docs/state-architecture.md` for the API, auth, database, and state-management direction. The planned production backend is Supabase; the current implementation uses a memory adapter with the same service boundaries for local tests and demos.
+
+See `docs/api-integration.md` for the Yelp API integration plan. Yelp credentials must be supplied through `YELP_API_KEY` on a backend-capable host and should never be committed to the repository.
+
+See `docs/vercel-deployment.md` for Vercel setup and runtime flow.
 
 ## Roadmap
 

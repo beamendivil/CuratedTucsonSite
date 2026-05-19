@@ -14,10 +14,10 @@
             href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
             rel="stylesheet"
         />
+        <link rel="stylesheet" href="dist/tailwind.css" />
         <link rel="stylesheet" href="styles.css" />
 
         <!-- Core Libraries -->
-        <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
         <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
@@ -578,6 +578,32 @@
                                 </div>
                             </li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Arizona Wine -->
+        <section class="py-20 aurora-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal-up">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-gradient mb-6">
+                        Live Winery Discovery
+                    </h2>
+                    <p class="text-xl text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+                        Yelp-powered business data is loaded through a Vercel serverless proxy when
+                        the production API key is configured.
+                    </p>
+                </div>
+
+                <div id="yelp-businesses" class="grid md:grid-cols-3 gap-8 reveal-up">
+                    <div class="wine-card rounded-2xl p-6 md:col-span-3">
+                        <h3 class="font-display text-xl font-bold text-charcoal mb-2">
+                            Loading live winery data
+                        </h3>
+                        <p class="text-charcoal/70">
+                            Connecting through the server-side Yelp proxy.
+                        </p>
                     </div>
                 </div>
             </div>

@@ -32,7 +32,17 @@ test('all public pages use the current brand and shared assets', () => {
         const html = readProjectFile(page);
 
         assert.match(html, new RegExp(expectedBrand), `${page} should include the current brand`);
+        assert.match(
+            html,
+            /href=["']dist\/tailwind\.css["']/,
+            `${page} should load compiled Tailwind CSS`
+        );
         assert.match(html, /href=["']styles\.css["']/, `${page} should load shared CSS`);
+        assert.doesNotMatch(
+            html,
+            /cdn\.tailwindcss\.com/,
+            `${page} should not load the Tailwind CDN in production`
+        );
         assert.match(html, /src=["']main\.js["']/, `${page} should load shared JS`);
 
         for (const retiredBrand of retiredBrands) {
@@ -145,4 +155,14 @@ test('repository metadata matches the public brand', () => {
     assert.equal(packageJson.name, 'arizona-wine-experience');
     assert.match(readme, new RegExp(`# ${expectedBrand}`));
     assert.doesNotMatch(readme, /Sonoran Wine|Curated Tucson/);
+});
+
+test('vercel proxy configuration is present for server-side Yelp calls', () => {
+    const vercelConfig = JSON.parse(readProjectFile('vercel.json'));
+    const envExample = readProjectFile('.env.example');
+
+    assert.equal(vercelConfig.framework, null);
+    assert.equal(vercelConfig.buildCommand, 'npm run build');
+    assert.equal(vercelConfig.outputDirectory, '.');
+    assert.match(envExample, /YELP_API_KEY=replace-with-rotated-yelp-api-key/);
 });

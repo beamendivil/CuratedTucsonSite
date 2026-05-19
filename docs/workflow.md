@@ -18,6 +18,7 @@ npm run check
 `.github/workflows/ci.yml` runs on pull requests, pushes to `main`, and manual dispatch. It installs dependencies with `npm ci` and runs:
 
 - ESLint
+- Tailwind production CSS build
 - Node smoke tests
 - Playwright browser tests
 - Prettier format check
@@ -27,6 +28,8 @@ The current smoke tests cover brand consistency, shared asset loading, local lin
 ## Deployment
 
 `.github/workflows/deploy.yml` deploys to GitHub Pages on pushes to `main` after running the same quality gate. This keeps the deployed portfolio site aligned with the checked source.
+
+The Yelp-enabled app path uses Vercel. See `docs/vercel-deployment.md` for environment variable and serverless proxy setup.
 
 ## Branch Strategy
 

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initRegionMap();
     initTextAnimations();
     initNavigation();
+    initYelpBusinessHighlights();
 });
 
 function runAnimation(options) {
@@ -339,6 +340,63 @@ function initNavigation() {
             }, 2200);
         });
     });
+}
+
+async function initYelpBusinessHighlights() {
+    const container = document.getElementById('yelp-businesses');
+    if (!container) return;
+
+    try {
+        const response = await fetch(
+            '/api/yelp-search?location=Tucson%2C%20AZ&term=wineries&limit=3'
+        );
+
+        if (!response.ok) {
+            throw new Error('Yelp proxy unavailable');
+        }
+
+        const data = await response.json();
+        const businesses = data.businesses || [];
+
+        if (!businesses.length) {
+            throw new Error('No Yelp businesses returned');
+        }
+
+        container.innerHTML = businesses
+            .map(business => {
+                const address = (business.address || []).join(', ');
+                const categories = (business.categories || []).join(' / ');
+
+                return `
+                    <article class="wine-card rounded-2xl p-6">
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <div>
+                                <h3 class="font-display text-xl font-bold text-charcoal">${business.name}</h3>
+                                <p class="text-sm text-charcoal/60">${categories || 'Arizona wine business'}</p>
+                            </div>
+                            <div class="text-right text-sm text-wine-burgundy font-semibold">
+                                ${business.rating || 'New'} ★
+                                <div class="text-xs text-charcoal/60">${business.reviewCount || 0} reviews</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-charcoal/70 mb-4">${address || 'Address available on Yelp'}</p>
+                        <a class="text-wine-burgundy font-medium text-sm hover:underline" href="${business.url}" target="_blank" rel="noopener noreferrer">
+                            View on Yelp
+                        </a>
+                    </article>
+                `;
+            })
+            .join('');
+    } catch (error) {
+        container.innerHTML = `
+            <div class="wine-card rounded-2xl p-6 md:col-span-3">
+                <h3 class="font-display text-xl font-bold text-charcoal mb-2">Live Yelp data is configured for Vercel</h3>
+                <p class="text-charcoal/70">
+                    Deploy with the <code class="text-sm">YELP_API_KEY</code> environment variable to populate this section from Yelp Fusion.
+                </p>
+            </div>
+        `;
+    }
 }
 
 // Wine pairing guide functionality (for pairing.html)

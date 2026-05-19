@@ -43,6 +43,8 @@ npm run check
 
 The full gate runs linting, static tests, browser tests, and formatting checks. CI and deployment both use this command so local validation matches GitHub Actions.
 
+The gate also builds `dist/tailwind.css` with the Tailwind CLI so tests run against production-style CSS rather than the development CDN.
+
 ## Future Coverage
 
 - Add mobile viewport E2E coverage.
