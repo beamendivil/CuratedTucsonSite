@@ -97,7 +97,7 @@ See `docs/testing.md` for the full testing strategy.
 
 ## Deployment
 
-The GitHub Pages workflow in `.github/workflows/deploy.yml` runs the full quality gate before publishing. The old GitHub Packages publish workflow was removed because this is a static website, not an npm package intended for distribution.
+The GitHub Pages workflow in `.github/workflows/deploy.yml` runs the full quality gate, builds the static site into `public/`, and publishes that artifact. The old GitHub Packages publish workflow was removed because this is a static website, not an npm package intended for distribution.
 
 See `docs/workflow.md` for the local development, CI, and deployment workflow.
 

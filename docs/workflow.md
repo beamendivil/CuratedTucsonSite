@@ -27,7 +27,7 @@ The current smoke tests cover brand consistency, shared asset loading, local lin
 
 ## Deployment
 
-`.github/workflows/deploy.yml` deploys to GitHub Pages on pushes to `main` after running the same quality gate. This keeps the deployed portfolio site aligned with the checked source.
+`.github/workflows/deploy.yml` deploys to GitHub Pages on pushes to `main` after running the same quality gate. It runs `npm run build` and publishes the generated `public/` artifact, which keeps the deployed portfolio site aligned with the Vercel static output.
 
 The Yelp-enabled app path uses Vercel. See `docs/vercel-deployment.md` for environment variable and serverless proxy setup.
 
